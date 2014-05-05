@@ -15,16 +15,16 @@ function Button(text, x, y) {
     this.x = x;
     this.y = y;
 
-    this.width = 280;
-    this.height = 60;
+    this.width = 450;
+    this.height = 100;
 
-    this.font = "normal 20pt Arial";
+    this.font = "normal 25pt Arial";
 
     this.draw = function(canvas) {
         canvas.fillStyle = this.bgColor;
         canvas.fillRect(this.x, this.y, this.width, this.height);
         canvas.fillStyle = this.textColor;
-        canvas.fillText(this.text, this.x + 5, this.y + 45);
+        canvas.fillText(this.text, this.x + 5, this.y + 70);
     }
 
     this.checkBounds = function(x, y) {

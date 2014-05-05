@@ -46,6 +46,11 @@ $(document).on('pageinit', function() {
 
     // ----- Mobile JQuery shinanegins ------
     $.mobile.orientationChangeEnabled = false;
+    $.mobile.loading('show', {
+        theme: "b",
+        text: "",
+        textonly: false
+    });
 
 
     // ~~~~~~~ ALL DEM GAME METHODS DOWN HERR ~~~~~~~
@@ -91,18 +96,7 @@ $(document).on('pageinit', function() {
             }
 
         } else {
-            // ---------- GAME OVER SCREEN ----------
-            canvas.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-            canvas.font = "bold 40pt Calibri";
-            canvas.fillStyle = "#000";
-            canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH * 10 / 45, GAME_HEIGHT * 10 / 25);
-            canvas.fillStyle = "#F00";
-            canvas.fillText("YOU LOSE", GAME_WIDTH / 4, GAME_HEIGHT / 4);
-
-            // Play again button
-            paButton.x = GAME_WIDTH / 4;
-            paButton.y = GAME_HEIGHT / 2;
-            paButton.draw(canvas);
+            gameOver();
         }
     }
 
@@ -161,6 +155,22 @@ $(document).on('pageinit', function() {
         switch (callCount) {
 
         }
+    }
+
+    function gameOver() {
+        // ---------- GAME OVER SCREEN ----------
+        var offset = 200;
+        canvas.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        canvas.font = "bold 65pt Calibri";
+        canvas.fillStyle = "#000";
+        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset + 25), GAME_HEIGHT * 10 / 25);
+        canvas.fillStyle = "#F00";
+        canvas.fillText("YOU LOSE", GAME_WIDTH / 2 - (offset), GAME_HEIGHT / 4);
+
+        // Play again button
+        paButton.x = GAME_WIDTH / 2 - offset;
+        paButton.y = GAME_HEIGHT / 2;
+        paButton.draw(canvas);
     }
 
     // ~~~~~~~ END THE GAME METHODS ~~~~~~~

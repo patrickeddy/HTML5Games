@@ -8,8 +8,8 @@ function Scorebar(width) {
     this.x = 0;
     this.y = 0;
     this.width = width;
-    this.height = 40;
-    this.font = "normal 25pt Calibri";
+    this.height = 100;
+    this.font = "normal 45pt Calibri";
 
     this.draw = function(canvas) {
         canvas.fillStyle = "#000";
@@ -18,12 +18,12 @@ function Scorebar(width) {
         canvas.fillStyle = "#FFF";
         canvas.textBaseline = "top";
         canvas.font = this.font;
-        canvas.fillText("Score: " + this.score, this.x, this.y);
+        canvas.fillText("Score: " + this.score, 5, 10);
 
-        canvas.fillText("Lives:", this.width - 250, 0);
+        canvas.fillText("Lives:", this.width - 325, 10);
 
         for (var count = 0; count < this.lives; count++) {
-            canvas.drawImage(this.livesIcon, this.width - (32 * count) - 80, 2);
+            canvas.drawImage(this.livesIcon, this.width - (32 * count) - 80, 25);
         }
 
     }
