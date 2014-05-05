@@ -22,15 +22,19 @@ $(document).on('pageinit', function () {
     // --------- Canvas ---------
     var layer2 = $("#layer2").get(0).getContext("2d");
     // Changing the canvas position down a little due to the overlay of the scorebar
-    $("#layer1").css("top", scorebar.height);
+    //    $("#layer1").css("top", scorebar.height + "px");
 
     // ------ Event Listeners -------
     $(document).on('vmousedown', 'body', function (e) {
+
+        var x = e.clientX;
+        var y = e.clientY;
+
         for (var kitty in kittens) {
 
             // If the kitten has not been hit, check the bounds and then add one if inside
             if (!kittens[kitty].hit) {
-                kittens[kitty].checkBounds(e.clientX, e.clientY);
+                kittens[kitty].checkBounds(x, y);
                 // If this kitty has been hit after check bounds, add one to the score
                 if (kittens[kitty].hit) {
                     scorebar.addOne();
@@ -40,7 +44,7 @@ $(document).on('pageinit', function () {
 
         // If the play again button is clicked, reload the page
         if (!paButton.isClicked) {
-            paButton.checkBounds(e.clientX, e.clientY);
+            paButton.checkBounds(x, y);
             if (paButton.isClicked) {
                 location.reload();
             }
@@ -76,11 +80,11 @@ $(document).on('pageinit', function () {
     function update() {
         // Changing canvas size based on window size
         GAME_WIDTH = window.innerWidth;
-        GAME_HEIGHT = window.innerHeight - scorebar.height;
+        GAME_HEIGHT = window.innerHeight;
         canvas.canvas.width = GAME_WIDTH;
         canvas.canvas.height = GAME_HEIGHT;
         layer2.canvas.width = GAME_WIDTH;
-        layer2.canvas.height = GAME_HEIGHT;
+        layer2.canvas.height = scorebar.height;
         scorebar.width = GAME_WIDTH;
 
         // Check for running based on lives
@@ -117,10 +121,11 @@ $(document).on('pageinit', function () {
         kittyBehavior();
     }, 10000 / changeSpeed);
 
+    // Number of kittys on screen 
+    var num_on_screen = 3;
 
     // The Kitty's main behavior
     function kittyBehavior() {
-        var num_on_screen = 3;
 
         for (var kitty = 0; kitty < num_on_screen; kitty++) {
             var current_kitty = kittens[kitty];
@@ -133,7 +138,7 @@ $(document).on('pageinit', function () {
                 current_kitty.x = x_pos;
             }
 
-            var y_pos = (Math.random() * GAME_HEIGHT) + 0;
+            var y_pos = (Math.random() * GAME_HEIGHT) + scorebar.height;
             if (y_pos + current_kitty.HEIGHT > GAME_HEIGHT) {
                 current_kitty.y = GAME_HEIGHT - current_kitty.HEIGHT;
             } else {
