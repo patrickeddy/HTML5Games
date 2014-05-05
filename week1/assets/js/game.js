@@ -25,12 +25,14 @@ $(document).on('pageinit', function() {
             // If the kitten has not been hit, check the bounds and then add one if inside
             if (!kittens[kitty].hit) {
                 kittens[kitty].checkBounds(e.clientX, e.clientY);
+                // If this kitty has been hit after check bounds, add one to the score
                 if (kittens[kitty].hit) {
                     scorebar.addOne();
                 }
             }
         }
 
+        // If the play again button is clicked, reload the page
         if (!paButton.isClicked) {
             paButton.checkBounds(e.clientX, e.clientY);
             if (paButton.isClicked) {
@@ -67,7 +69,7 @@ $(document).on('pageinit', function() {
         canvas.canvas.width = GAME_WIDTH;
         canvas.canvas.height = GAME_HEIGHT;
         layer2.canvas.width = GAME_WIDTH;
-        layer2.canvas.width = GAME_HEIGHT;
+        layer2.canvas.height = GAME_HEIGHT;
         scorebar.width = GAME_WIDTH;
 
         // Check for running based on lives
@@ -96,6 +98,8 @@ $(document).on('pageinit', function() {
             canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH * 10 / 45, GAME_HEIGHT * 10 / 25);
             canvas.fillStyle = "#F00";
             canvas.fillText("YOU LOSE", GAME_WIDTH / 4, GAME_HEIGHT / 4);
+
+            // Play again button
             paButton.x = GAME_WIDTH / 4;
             paButton.y = GAME_HEIGHT / 2;
             paButton.draw(canvas);

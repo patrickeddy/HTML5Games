@@ -15,8 +15,8 @@ function Button(text, x, y) {
     this.x = x;
     this.y = y;
 
-    this.width = 300;
-    this.height = 50;
+    this.width = 280;
+    this.height = 60;
 
     this.font = "normal 20pt Arial";
 
@@ -24,7 +24,7 @@ function Button(text, x, y) {
         canvas.fillStyle = this.bgColor;
         canvas.fillRect(this.x, this.y, this.width, this.height);
         canvas.fillStyle = this.textColor;
-        canvas.fillText(this.text, this.x, this.y + 40);
+        canvas.fillText(this.text, this.x + 5, this.y + 45);
     }
 
     this.checkBounds = function(x, y) {
