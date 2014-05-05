@@ -1,4 +1,4 @@
-$(document).on('pageinit', function() {
+$(document).on('pageinit', function () {
 
     // ----- ALL DEEZ VARIABLES ----- 
     var GAME_WIDTH = window.innerWidth;
@@ -9,6 +9,8 @@ $(document).on('pageinit', function() {
     var bgColor = "#00A"
 
     var scorebar = new Scorebar(GAME_WIDTH);
+    // Adjusting the offset and making the window less high
+    GAME_HEIGHT = window.innerHeight - scorebar.height;
     var paButton = new Button("Play again?");
 
     var kittens = [];
@@ -16,10 +18,14 @@ $(document).on('pageinit', function() {
         kittens.push(new Kitty());
     }
     var canvas = $("#layer1").get(0).getContext("2d");
+
+    // --------- Canvas ---------
     var layer2 = $("#layer2").get(0).getContext("2d");
+    // Changing the canvas position down a little due to the overlay of the scorebar
+    $("#layer1").css("top", scorebar.height);
 
     // ------ Event Listeners -------
-    $(document).on('vmousedown', 'body', function(e) {
+    $(document).on('vmousedown', 'body', function (e) {
         for (var kitty in kittens) {
 
             // If the kitten has not been hit, check the bounds and then add one if inside
@@ -57,7 +63,7 @@ $(document).on('pageinit', function() {
 
     // Main Game Loop
     var FPS = 30;
-    setInterval(function() {
+    setInterval(function () {
         if (running) {
 
             update();
@@ -70,7 +76,7 @@ $(document).on('pageinit', function() {
     function update() {
         // Changing canvas size based on window size
         GAME_WIDTH = window.innerWidth;
-        GAME_HEIGHT = window.innerHeight;
+        GAME_HEIGHT = window.innerHeight - scorebar.height;
         canvas.canvas.width = GAME_WIDTH;
         canvas.canvas.height = GAME_HEIGHT;
         layer2.canvas.width = GAME_WIDTH;
@@ -107,7 +113,7 @@ $(document).on('pageinit', function() {
     var callCount = 0;
 
     // INITIAL KITTY INTERVAL
-    setInterval(function() {
+    setInterval(function () {
         kittyBehavior();
     }, 10000 / changeSpeed);
 
@@ -159,11 +165,11 @@ $(document).on('pageinit', function() {
 
     function gameOver() {
         // ---------- GAME OVER SCREEN ----------
-        var offset = 200;
+        var offset = 180;
         canvas.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        canvas.font = "bold 65pt Calibri";
+        canvas.font = "bold 45pt Calibri";
         canvas.fillStyle = "#000";
-        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset + 25), GAME_HEIGHT * 10 / 25);
+        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset + 10), GAME_HEIGHT * 10 / 25);
         canvas.fillStyle = "#F00";
         canvas.fillText("YOU LOSE", GAME_WIDTH / 2 - (offset), GAME_HEIGHT / 4);
 

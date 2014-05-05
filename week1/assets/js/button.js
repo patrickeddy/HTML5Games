@@ -15,19 +15,19 @@ function Button(text, x, y) {
     this.x = x;
     this.y = y;
 
-    this.width = 450;
+    this.width = 320;
     this.height = 100;
 
     this.font = "normal 25pt Arial";
 
-    this.draw = function(canvas) {
+    this.draw = function (canvas) {
         canvas.fillStyle = this.bgColor;
         canvas.fillRect(this.x, this.y, this.width, this.height);
         canvas.fillStyle = this.textColor;
         canvas.fillText(this.text, this.x + 5, this.y + 70);
     }
 
-    this.checkBounds = function(x, y) {
+    this.checkBounds = function (x, y) {
         if (x >= this.x && x < this.x + this.width) {
             if (y >= this.y && y < this.y + this.height) {
                 this.isClicked = true;
