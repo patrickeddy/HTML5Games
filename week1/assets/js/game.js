@@ -113,13 +113,12 @@ $(document).on('pageinit', function () {
     // ------- END MAIN LOOP -------
 
     // KITTY UPDATE VARIABLES
-    var changeSpeed = 2;
     var callCount = 0;
 
     // INITIAL KITTY INTERVAL
-    setInterval(function () {
+    var kitty_interval = setInterval(function () {
         kittyBehavior();
-    }, 10000 / changeSpeed);
+    }, 10000 / 2);
 
     // Number of kittys on screen 
     var num_on_screen = 3;
@@ -145,34 +144,44 @@ $(document).on('pageinit', function () {
                 current_kitty.y = y_pos;
             }
 
-            if (!current_kitty.hit) {
-                scorebar.miss();
+            if (callCount > 0) {
+                if (!current_kitty.hit) {
+                    scorebar.miss();
+                }
             }
-
-            // Set difficulty based on callCount
-            setDifficulty(callCount);
-
 
             // Reset the hit boolean because the kitty is updated
             current_kitty.hit = false;
-
-            // Up the call count
-            ++callCount;
         }
+
+        // Set difficulty based on callCount
+        setDifficulty(callCount);
+        // Up the call count
+        callCount++;
     }
 
     // Change difficulty based on the number of calls (time based hardness)
-    function setDifficulty(callCount) {
-        switch (callCount) {
+    var threshold = 10;
+    var rate = 2;
 
+    function setDifficulty(callCount) {
+        if (callCount >= threshold) {
+
+            threshold *= 2;
+            rate = rate * 2;
+
+            clearInterval(kitty_interval);
+            kitty_interval = setInterval(function () {
+                kittyBehavior();
+            }, 10000 / rate);
         }
     }
 
     function gameOver() {
         // ---------- GAME OVER SCREEN ----------
-        var offset = 180;
+        var offset = 150;
         canvas.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        canvas.font = "bold 45pt Calibri";
+        canvas.font = "bold 35pt Calibri";
         canvas.fillStyle = "#000";
         canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset + 10), GAME_HEIGHT * 10 / 25);
         canvas.fillStyle = "#F00";

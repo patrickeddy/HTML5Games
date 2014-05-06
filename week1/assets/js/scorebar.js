@@ -17,7 +17,7 @@ function Scorebar(width) {
 
         canvas.fillStyle = "#FFF";
         canvas.textBaseline = "top";
-        canvas.font = "normal 45pt Calibri";
+        canvas.font = "normal 35pt Calibri";
         canvas.fillText("Score: " + this.score, 5, 10);
         canvas.font = "normal 30pt Calibri";
         canvas.fillText("Lives", this.width - 130, 0);
