@@ -27,11 +27,46 @@ $(document).ready(function () {
             kittens.push(kitty);
         }
     }
-    var canvas = $("#layer1").get(0).getContext("2d");
+
 
     // --------- Canvas ---------
+    var canvas = $("#layer1").get(0).getContext("2d");
     var layer2 = $("#layer2").get(0).getContext("2d");
-    // Changing the canvas position down a little due to the overlay of the scorebar
+
+    function checkScaleFactor() {
+        if (scaleFactor > 1) {
+            canvas.canvas.width = canvas.canvas.width * scaleFactor;
+            canvas.canvas.height = canvas.canvas.height * scaleFactor;
+            layer2.canvas.width = layer2.canvas.width * scaleFactor;
+            layer2.canvas.height = layer2.canvas.height * scaleFactor;
+            scorebar.canvas.width = scorebar.canvas.width * scaleFactor;
+
+            canvas.getContext("2d");
+            layer2.getContext("2d");
+            scorebar.getContext("2d");
+        }
+    }
+
+    function backingScale(context) {
+
+        if ('devicePixelRatio' in window) {
+
+            if (window.devicePixelRatio > 1) {
+
+                return window.devicePixelRatio;
+
+            }
+
+        }
+
+        return 1;
+
+    }
+
+    // Call these methods intially
+    var scaleFactor = backingScale(canvas);
+    checkScaleFactor();
+
 
 
     // ------ Event Listeners -------
@@ -81,11 +116,18 @@ $(document).ready(function () {
         // Changing canvas size based on window size
         GAME_WIDTH = window.innerWidth;
         GAME_HEIGHT = window.innerHeight;
+
+        // Make sure the scale factor is up to date with dim
+        scaleFactor = backingScale(canvas);
+        checkScaleFactor();
+
         canvas.canvas.width = GAME_WIDTH;
         canvas.canvas.height = GAME_HEIGHT;
         layer2.canvas.width = GAME_WIDTH;
         layer2.canvas.height = scorebar.height;
         scorebar.width = GAME_WIDTH;
+
+
 
         // Check for running based on lives
         if (scorebar.lives < 0) {
@@ -163,12 +205,16 @@ $(document).ready(function () {
     // Change difficulty based on the number of calls (time based hardness)
     var threshold = 10;
     var rate = 2;
+    var multiplier = 2.1;
 
     function setDifficulty(callCount) {
         if (callCount >= threshold) {
 
             threshold *= 2;
-            rate = rate * 2;
+            if (multiplier != 1) {
+                multiplier -= 0.1;
+            }
+            rate = rate * multiplier;
 
             clearInterval(kitty_interval);
             kitty_interval = setInterval(function () {
