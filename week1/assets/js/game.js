@@ -1,16 +1,20 @@
-$(document).on('pageinit', function () {
+$(document).ready(function () {
 
     // ----- ALL DEEZ VARIABLES ----- 
-    var GAME_WIDTH = window.innerWidth;
-    var GAME_HEIGHT = window.innerHeight;
+    var GAME_WIDTH = window.outerWidth;
+    var GAME_HEIGHT = window.outerHeight;
+
+    // Misc document manipulation that needs it's own file
+    manipulation();
 
     var running = true;
-
     var bgColor = "#00A"
 
     var scorebar = new Scorebar(GAME_WIDTH);
+
     // Adjusting the offset and making the window less high
     GAME_HEIGHT = window.innerHeight - scorebar.height;
+
     var paButton = new Button("Play again?");
 
     var kittens = [];
@@ -28,10 +32,10 @@ $(document).on('pageinit', function () {
     // --------- Canvas ---------
     var layer2 = $("#layer2").get(0).getContext("2d");
     // Changing the canvas position down a little due to the overlay of the scorebar
-    //    $("#layer1").css("top", scorebar.height + "px");
+
 
     // ------ Event Listeners -------
-    $(document).on('vmousedown', 'body', function (e) {
+    $(document).on('mousedown', 'body', function (e) {
 
         var x = e.clientX;
         var y = e.clientY;
@@ -56,16 +60,6 @@ $(document).on('pageinit', function () {
             }
         }
 
-    });
-
-    window.addEventListener('resize', null, false);
-
-    // ----- Mobile JQuery shinanegins ------
-    $.mobile.orientationChangeEnabled = false;
-    $.mobile.loading('show', {
-        theme: "b",
-        text: "",
-        textonly: false
     });
 
 
@@ -185,13 +179,14 @@ $(document).on('pageinit', function () {
 
     function gameOver() {
         // ---------- GAME OVER SCREEN ----------
-        var offset = 150;
+        var offset = 140;
         canvas.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        canvas.font = "bold 40pt Calibri";
-        canvas.fillStyle = "#000";
-        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset + 10), GAME_HEIGHT * 10 / 25);
+        canvas.font = "bold 35pt Calibri";
         canvas.fillStyle = "#F00";
         canvas.fillText("OH NOES", GAME_WIDTH / 2 - (offset), GAME_HEIGHT / 4);
+        canvas.fillStyle = "#000";
+        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset + 15), GAME_HEIGHT * 10 / 25);
+
 
         // Play again button
         paButton.x = GAME_WIDTH / 2 - offset;

@@ -1,7 +1,23 @@
+html {
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden;
+}
 html,
 body {
     width: 100%;
     height: 100%;
-    margin: 0px;
-    overflow: hidden;
+}
+#body {
+    margin: -20px;
+}
+canvas {
+    display: block;
+}
+.ui-page,
+.ui-body-c,
+.ui-page-active,
+.ui-mobile.ui-page {
+    min-height: none !important;
+    overflow: auto !important;
 }
