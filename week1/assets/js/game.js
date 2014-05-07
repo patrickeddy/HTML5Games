@@ -14,8 +14,14 @@ $(document).on('pageinit', function () {
     var paButton = new Button("Play again?");
 
     var kittens = [];
-    for (var count = 1; count < 10; count++) {
-        kittens.push(new Kitty());
+    for (var count = 1; count <= 3; count++) {
+        if (GAME_WIDTH < 768) {
+            kittens.push(new Kitty());
+        } else if (GAME_WIDTH > 768) {
+            var kitty = new Kitty();
+            kitty.makeBig();
+            kittens.push(kitty);
+        }
     }
     var canvas = $("#layer1").get(0).getContext("2d");
 
@@ -67,7 +73,7 @@ $(document).on('pageinit', function () {
 
     // Main Game Loop
     var FPS = 30;
-    setInterval(function () {
+    var mainloop = setInterval(function () {
         if (running) {
 
             update();
@@ -181,11 +187,11 @@ $(document).on('pageinit', function () {
         // ---------- GAME OVER SCREEN ----------
         var offset = 150;
         canvas.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        canvas.font = "bold 35pt Calibri";
+        canvas.font = "bold 40pt Calibri";
         canvas.fillStyle = "#000";
         canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset + 10), GAME_HEIGHT * 10 / 25);
         canvas.fillStyle = "#F00";
-        canvas.fillText("YOU LOSE", GAME_WIDTH / 2 - (offset), GAME_HEIGHT / 4);
+        canvas.fillText("OH NOES", GAME_WIDTH / 2 - (offset), GAME_HEIGHT / 4);
 
         // Play again button
         paButton.x = GAME_WIDTH / 2 - offset;

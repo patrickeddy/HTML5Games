@@ -2,18 +2,17 @@ function Kitty() {
     Kitty(0, 0);
 }
 
-
-function Kitty(x, y) {
-    Kitty(x, y);
-}
-
 function Kitty(x, y) {
     this.x = x;
     this.y = y;
-    this.WIDTH = 250;
-    this.HEIGHT = 250;
+    this.isSmall = true;
+
+    // Init variables based on device width
+    this.WIDTH = 100;
+    this.HEIGHT = 100;
     this.image = new Image();
-    this.image.src = "assets/img/cat.jpeg";
+    this.image.src = "assets/img/cat-sm.jpeg";
+
     this.hit = false;
 
     this.draw = function (canvas) {
@@ -30,4 +29,9 @@ function Kitty(x, y) {
         }
     }
 
+    this.makeBig = function () {
+        this.WIDTH = 250;
+        this.HEIGHT = 250;
+        this.image.src = "assets/img/cat.jpeg";
+    }
 }

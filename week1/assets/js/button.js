@@ -15,7 +15,7 @@ function Button(text, x, y) {
     this.x = x;
     this.y = y;
 
-    this.width = 250;
+    this.width = 280;
     this.height = 100;
 
     this.font = "normal 25pt Arial";
