@@ -26,12 +26,12 @@ function Scorebar(width) {
             canvas.drawImage(this.livesIcon, this.width - (32 * count) - 70, 45);
         }
 
-    }
+    };
 
     this.addOne = function () {
         this.score++;
-    }
+    };
     this.miss = function () {
         this.lives--;
-    }
+    };
 }

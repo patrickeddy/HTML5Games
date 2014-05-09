@@ -21,11 +21,16 @@ function Button(text, x, y) {
     this.font = "normal 25pt Arial";
 
     this.draw = function (canvas) {
+
+        this.text_x = this.x + this.width / 3.5;
+        this.text_y = this.y + 60;
+
         canvas.fillStyle = this.bgColor;
         canvas.fillRect(this.x, this.y, this.width, this.height);
         canvas.fillStyle = this.textColor;
-        canvas.fillText(this.text, this.x + 5, this.y + 70);
-    }
+        canvas.font = this.font;
+        canvas.fillText(this.text, this.text_x, this.text_y);
+    };
 
     this.checkBounds = function (x, y) {
         if (x >= this.x && x < this.x + this.width) {
@@ -33,5 +38,5 @@ function Button(text, x, y) {
                 this.isClicked = true;
             }
         }
-    }
+    };
 }

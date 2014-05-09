@@ -7,15 +7,16 @@ $(document).ready(function () {
     // Misc document manipulation that needs it's own file
     manipulation();
 
-    var running = true;
+    var running = false;
+    var paused = false;
     var bgColor = "#00A"
 
     var scorebar = new Scorebar(GAME_WIDTH);
+    var startScreen;
+    var pauseMenu;
+    var gameOver;
 
-    // Adjusting the offset and making the window less high
-    GAME_HEIGHT = window.innerHeight - scorebar.height;
-
-    var paButton = new Button("Play again?");
+    var menuLoop;
 
     var kittens = [];
     for (var count = 1; count <= 3; count++) {
@@ -30,8 +31,9 @@ $(document).ready(function () {
 
 
     // --------- Canvas ---------
-    var canvas = $("#layer1").get(0).getContext("2d");
-    var layer2 = $("#layer2").get(0).getContext("2d");
+    var canvas = $("#game").get(0).getContext("2d");
+    var layer2 = $("#scorebar").get(0).getContext("2d");
+    var overlay = $("#overlay").get(0).getContext("2d");
 
 
     // ------ Event Listeners -------
@@ -53,13 +55,39 @@ $(document).ready(function () {
         }
 
         // If the play again button is clicked, reload the page
-        if (!paButton.isClicked) {
-            paButton.checkBounds(x, y);
-            if (paButton.isClicked) {
+        if (!gameOver.paButton.isClicked) {
+            gameOver.paButton.checkBounds(x, y);
+            if (gameOver.paButton.isClicked) {
                 location.reload();
             }
         }
 
+        if (!pauseMenu.rButton.isClicked) {
+            pauseMenu.rButton.checkBounds(x, y);
+            if (pauseMenu.rButton.isClicked) {
+                resume();
+                clearInterval(menuLoop);
+                menuLoop = null;
+                pauseMenu.rButton.isClicked = false;
+            }
+        }
+
+        if (!startScreen.playButton.isClicked) {
+            startScreen.playButton.checkBounds(x, y);
+            if (startScreen.playButton.isClicked) {
+                resume();
+                clearInterval(menuLoop);
+                menuLoop = null;
+                startScreen.playButton.isClicked = false;
+            }
+        }
+
+    });
+
+    $(document).mouseout(function () {
+        if (!paused && running) {
+            pause();
+        }
     });
 
 
@@ -67,14 +95,68 @@ $(document).ready(function () {
 
     // Main Game Loop
     var FPS = 30;
-    var mainloop = setInterval(function () {
+    var mainloop;
+    init();
+
+    // Main init
+    function init() {
+        GAME_WIDTH = window.innerWidth;
+        GAME_HEIGHT = window.innerHeight;
+        canvas.canvas.width = GAME_WIDTH;
+        canvas.canvas.height = GAME_HEIGHT;
+
+        startScreen = new StartScreen(GAME_WIDTH, GAME_HEIGHT);
+        pauseMenu = new PauseMenu(GAME_WIDTH, GAME_HEIGHT);
+        gameOver = new GameOver(scorebar, GAME_WIDTH, GAME_HEIGHT);
+        menuLoop();
+
+    }
+
+    function menuLoop() {
+        if (!running) {
+            menuLoop = setInterval(function () {
+                updateWindowDim(window.innerWidth, window.innerHeight);
+                startScreen.width = window.innerWidth;
+                startScreen.height = window.innerHeight;
+                startScreen.draw(canvas);
+            }, 1000 / 15);
+        }
+    }
+
+    // The game loop
+    function gameLoop() {
         if (running) {
 
             update();
             draw();
 
         }
-    }, 1000 / FPS);
+    }
+
+    // Handle the pause
+    function pause() {
+        running = false;
+        clearInterval(mainloop);
+        mainloop = null;
+
+        paused = true;
+        if (paused) {
+            menuLoop = setInterval(function () {
+                updateWindowDim(window.innerWidth, window.innerHeight);
+                pauseMenu.width = window.innerWidth;
+                pauseMenu.height = window.innerHeight;
+                pauseMenu.draw(overlay);
+            }, 1000 / 15);
+        }
+    }
+
+    function resume() {
+        paused = false;
+        running = true;
+        mainloop = setInterval(function () {
+            gameLoop();
+        }, 1000 / FPS);
+    }
 
     // --------- MAIN LOOP --------
     function update() {
@@ -106,6 +188,8 @@ $(document).ready(function () {
         canvas.canvas.width = GAME_WIDTH;
         canvas.canvas.height = GAME_HEIGHT;
         layer2.canvas.width = GAME_WIDTH;
+        overlay.canvas.width = GAME_WIDTH;
+        overlay.canvas.height = GAME_HEIGHT;
         scorebar.width = GAME_WIDTH;
     }
 
@@ -122,7 +206,7 @@ $(document).ready(function () {
             }
 
         } else {
-            gameOver();
+            gameOver.draw(canvas);
         }
     }
 
@@ -160,7 +244,7 @@ $(document).ready(function () {
                 current_kitty.y = y_pos;
             }
 
-            if (callCount > 0) {
+            if (callCount > 0 && running) {
                 if (!current_kitty.hit) {
                     scorebar.miss();
                 }
@@ -195,23 +279,6 @@ $(document).ready(function () {
                 kittyBehavior();
             }, 10000 / rate);
         }
-    }
-
-    function gameOver() {
-        // ---------- GAME OVER SCREEN ----------
-        var offset = 140;
-        canvas.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        canvas.font = "bold 35pt Calibri";
-        canvas.fillStyle = "#F00";
-        canvas.fillText("OH NOES", GAME_WIDTH / 2 - (offset), GAME_HEIGHT / 4);
-        canvas.fillStyle = "#000";
-        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset + 15), GAME_HEIGHT * 10 / 25);
-
-
-        // Play again button
-        paButton.x = GAME_WIDTH / 2 - offset;
-        paButton.y = GAME_HEIGHT / 2;
-        paButton.draw(canvas);
     }
 
     // ~~~~~~~ END THE GAME METHODS ~~~~~~~

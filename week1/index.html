@@ -8,21 +8,23 @@
 
 <body id="my-body" data-role="none">
     <div id="canvas">
-        <canvas id="layer1" style="z-index:0; position: absolute; left: 0; top: 0;"></canvas>
-        <canvas id="layer2" style="z-index:1;position: absolute; left: 0; top: 0;"></canvas>
+        <canvas id="game" style="z-index:0; position: absolute; left: 0; top: 0;"></canvas>
+        <canvas id="scorebar" style="z-index:1;position: absolute; left: 0; top: 0;"></canvas>
+        <canvas id="overlay" style="z-index:2;position: absolute; left: 0; top: 0;"></canvas>
     </div>
 
     <!--    Loading the Javascript at the end for faster load times -->
-    <script type=" text/javascript " src="assets/js/jquery/jquery-2.1.0.js "></script>
+    <script type="text/javascript" src="assets/js/jquery/jquery-2.1.0.js"></script>
 
     <!--    Misc. Javascript files-->
-    <script type="text/javascript " src="assets/js/kitty.js "></script>
-    <script type="text/javascript " src="assets/js/scorebar.js "></script>
-    <script type="text/javascript " src="assets/js/button.js "></script>
+    <script type="text/javascript" src="assets/js/kitty.js"></script>
+    <script type="text/javascript" src="assets/js/scorebar.js"></script>
+    <script type="text/javascript" src="assets/js/button.js"></script>
+    <script type="text/javascript" src="assets/js/menus.js"></script>
 
-    <!--    Main engine-->
+    <!-- Main engine -->
     <script type="text/javascript" src="assets/js/jquery/manipulation.js"></script>
-    <script type="text/javascript " src="assets/js/game.js "></script>
+    <script type="text/javascript" src="assets/js/game.js"></script>
 
 </body>
 
