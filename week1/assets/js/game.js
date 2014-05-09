@@ -102,10 +102,12 @@ $(document).ready(function () {
 
     // Own method to elements dependent on changing size
     function updateWindowDim(width, height) {
-        canvas.canvas.width = width;
-        canvas.canvas.height = height;
-        layer2.canvas.width = width;
-        scorebar.width = width;
+        GAME_WIDTH = width;
+        GAME_HEIGHT = height;
+        canvas.canvas.width = GAME_WIDTH;
+        canvas.canvas.height = GAME_HEIGHT;
+        layer2.canvas.width = GAME_WIDTH;
+        scorebar.width = GAME_WIDTH;
     }
 
     function draw() {
