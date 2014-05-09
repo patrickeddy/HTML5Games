@@ -37,7 +37,7 @@ $(document).ready(function () {
 
 
     // ------ Event Listeners -------
-    $(document).on('mousedown', 'body', function (e) {
+    $(document).click('body', function (e) {
 
         var x = e.clientX;
         var y = e.clientY;
