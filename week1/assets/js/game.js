@@ -81,19 +81,31 @@ $(document).ready(function () {
         // Changing canvas size based on window size
         GAME_WIDTH = window.innerWidth;
         GAME_HEIGHT = window.innerHeight;
+        if (GAME_WIDTH < 320 && GAME_HEIGHT < 480) {
+            updateWindowDim(320, 480);
+        } else if (GAME_WIDTH < 320) {
+            updateWindowDim(320, GAME_HEIGHT);
+        } else if (GAME_HEIGHT < 480) {
+            updateWindowDim(GAME_WIDTH, 480);
+        } else {
+            updateWindowDim(GAME_WIDTH, GAME_HEIGHT);
+        }
 
-        canvas.canvas.width = GAME_WIDTH;
-        canvas.canvas.height = GAME_HEIGHT;
-        layer2.canvas.width = GAME_WIDTH;
+        // Always update scorebar to height
         layer2.canvas.height = scorebar.height;
-        scorebar.width = GAME_WIDTH;
-
-
 
         // Check for running based on lives
         if (scorebar.lives < 0) {
             running = false;
         }
+    }
+
+    // Own method to elements dependent on changing size
+    function updateWindowDim(width, height) {
+        canvas.canvas.width = width;
+        canvas.canvas.height = height;
+        layer2.canvas.width = width;
+        scorebar.width = width;
     }
 
     function draw() {
@@ -166,14 +178,14 @@ $(document).ready(function () {
     // Change difficulty based on the number of calls (time based hardness)
     var threshold = 10;
     var rate = 2;
-    var multiplier = 2.1;
+    var multiplier = 2.0;
 
     function setDifficulty(callCount) {
         if (callCount >= threshold) {
 
             threshold *= 2;
-            if (multiplier != 1) {
-                multiplier -= 0.1;
+            if (multiplier != 1.0) {
+                multiplier -= 0.5;
             }
             rate = rate * multiplier;
 
