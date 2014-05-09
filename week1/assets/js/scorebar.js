@@ -3,7 +3,7 @@ function Scorebar(width) {
     this.lives = 3;
 
     this.livesIcon = new Image();
-    this.livesIcon.src = "assets/img/banana.gif";
+    this.livesIcon.src = "assets/img/paw.gif";
 
     this.x = 0;
     this.y = 0;
