@@ -1,8 +1,8 @@
 $(document).ready(function () {
 
     // ----- ALL DEEZ VARIABLES ----- 
-    var GAME_WIDTH = window.outerWidth;
-    var GAME_HEIGHT = window.outerHeight;
+    var GAME_WIDTH = window.innerWidth;
+    var GAME_HEIGHT = window.innerHeight;
 
     // Misc document manipulation that needs it's own file
     manipulation();
