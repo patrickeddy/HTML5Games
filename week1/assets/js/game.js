@@ -78,17 +78,16 @@ $(document).ready(function () {
 
     // --------- MAIN LOOP --------
     function update() {
+
         // Changing canvas size based on window size
-        GAME_WIDTH = window.innerWidth;
-        GAME_HEIGHT = window.innerHeight;
-        if (GAME_WIDTH < 320 && GAME_HEIGHT < 480) {
+        if (window.innerWidth < 320 && window.innerHeight < 480) {
             updateWindowDim(320, 480);
-        } else if (GAME_WIDTH < 320) {
-            updateWindowDim(320, GAME_HEIGHT);
-        } else if (GAME_HEIGHT < 480) {
-            updateWindowDim(GAME_WIDTH, 480);
+        } else if (window.innerWidth < 320) {
+            updateWindowDim(320, window.innerHeight);
+        } else if (window.innerHeight < 480) {
+            updateWindowDim(window.innerWidth, 480);
         } else {
-            updateWindowDim(GAME_WIDTH, GAME_HEIGHT);
+            updateWindowDim(window.innerWidth, window.innerHeight);
         }
 
         // Always update scorebar to height
