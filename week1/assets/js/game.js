@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
     // ----- ALL DEEZ VARIABLES ----- 
     var GAME_WIDTH = window.innerWidth;
@@ -37,7 +37,7 @@ $(document).ready(function () {
 
 
     // ------ Event Listeners -------
-    $(document).on('mousedown', 'body', function (e) {
+    window.addEventListener("click", function(e) {
 
         var x = e.clientX;
         var y = e.clientY;
@@ -82,9 +82,9 @@ $(document).ready(function () {
             }
         }
 
-    });
+    }, false);
 
-    $(document).mouseout(function () {
+    $(document).mouseout(function() {
         if (!paused && running) {
             pause();
         }
@@ -114,7 +114,7 @@ $(document).ready(function () {
 
     function menuLoop() {
         if (!running) {
-            menuLoop = setInterval(function () {
+            menuLoop = setInterval(function() {
                 updateWindowDim(window.innerWidth, window.innerHeight);
                 startScreen.width = window.innerWidth;
                 startScreen.height = window.innerHeight;
@@ -141,7 +141,7 @@ $(document).ready(function () {
 
         paused = true;
         if (paused) {
-            menuLoop = setInterval(function () {
+            menuLoop = setInterval(function() {
                 updateWindowDim(window.innerWidth, window.innerHeight);
                 pauseMenu.width = window.innerWidth;
                 pauseMenu.height = window.innerHeight;
@@ -153,7 +153,7 @@ $(document).ready(function () {
     function resume() {
         paused = false;
         running = true;
-        mainloop = setInterval(function () {
+        mainloop = setInterval(function() {
             gameLoop();
         }, 1000 / FPS);
     }
@@ -216,7 +216,7 @@ $(document).ready(function () {
     var callCount = 0;
 
     // INITIAL KITTY INTERVAL
-    var kitty_interval = setInterval(function () {
+    var kitty_interval = setInterval(function() {
         kittyBehavior();
     }, 10000 / 2);
 
@@ -275,7 +275,7 @@ $(document).ready(function () {
             rate = rate * multiplier;
 
             clearInterval(kitty_interval);
-            kitty_interval = setInterval(function () {
+            kitty_interval = setInterval(function() {
                 kittyBehavior();
             }, 10000 / rate);
         }
