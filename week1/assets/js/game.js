@@ -18,6 +18,14 @@ $(document).ready(function () {
 
     var menuLoop;
 
+    // Clear phrases
+    var phrases = ["Clear!", "Nice!", "Alright!", "Good!", "Hold on!", "Ahh!"];
+    var pickPhrase;
+
+    // KITTY UPDATE VARIABLES
+    var callCount = 0;
+    var num_kitties_visible = 0;
+
     var kittens = [];
     for (var count = 1; count <= 3; count++) {
         if (GAME_WIDTH < 768) {
@@ -37,7 +45,11 @@ $(document).ready(function () {
 
 
     // ------ Event Listeners -------
+<<<<<<< HEAD
     $(document).click('body', function (e) {
+=======
+    window.addEventListener("click", function (e) {
+>>>>>>> dev/backgroundColors
 
         var x = e.clientX;
         var y = e.clientY;
@@ -50,6 +62,7 @@ $(document).ready(function () {
                 // If this kitty has been hit after check bounds, add one to the score
                 if (kittens[kitty].hit) {
                     scorebar.addOne();
+                    num_kitties_visible--;
                 }
             }
         }
@@ -82,7 +95,7 @@ $(document).ready(function () {
             }
         }
 
-    });
+    }, false);
 
     $(document).mouseout(function () {
         if (!paused && running) {
@@ -191,6 +204,8 @@ $(document).ready(function () {
         overlay.canvas.width = GAME_WIDTH;
         overlay.canvas.height = GAME_HEIGHT;
         scorebar.width = GAME_WIDTH;
+
+        changeBackground();
     }
 
     function draw() {
@@ -205,15 +220,25 @@ $(document).ready(function () {
                 kittens[kitty].draw(canvas);
             }
 
+
+
+            if (callCount == 0) {
+                canvas.fillStyle = "#FFF";
+                canvas.font = "bold 30pt arial";
+                canvas.fillText("Get ready!", GAME_WIDTH / 3, GAME_HEIGHT / 2);
+            }
+            if (num_kitties_visible == 0 && callCount != 0) {
+                canvas.fillStyle = "#FFF";
+                canvas.font = "bold 30pt arial";
+                canvas.fillText(pickPhrase, GAME_WIDTH / 2 - 40, GAME_HEIGHT / 2);
+            }
+
         } else {
             gameOver.draw(canvas);
         }
     }
 
     // ------- END MAIN LOOP -------
-
-    // KITTY UPDATE VARIABLES
-    var callCount = 0;
 
     // INITIAL KITTY INTERVAL
     var kitty_interval = setInterval(function () {
@@ -254,10 +279,35 @@ $(document).ready(function () {
             current_kitty.hit = false;
         }
 
+        // Pick the phrase if all kitties gone
+        if (num_kitties_visible == 0) {
+            pickPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+        }
         // Set difficulty based on callCount
         setDifficulty(callCount);
+        // Reset the number of kitties visible
+        num_kitties_visible = 3;
         // Up the call count
         callCount++;
+    }
+
+    function changeBackground() {
+        switch (num_kitties_visible) {
+        case 3:
+            bgColor = "#BB0000";
+            break;
+        case 2:
+            bgColor = "#CCC000";
+            break;
+        case 1:
+            bgColor = "#00CC00";
+            break;
+        case 0:
+            bgColor = "#000";
+            canvas.fillText(pickPhrase, GAME_WIDTH / 3, GAME_HEIGHT / 2);
+            break;
+
+        }
     }
 
     // Change difficulty based on the number of calls (time based hardness)
