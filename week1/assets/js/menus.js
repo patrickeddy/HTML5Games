@@ -3,14 +3,18 @@ function StartScreen(GAME_WIDTH, GAME_HEIGHT) {
     this.height = GAME_HEIGHT;
 
     this.playButton = new Button("Play!", this.width, this.height);
+    this.paw = new Image();
+    this.paw.src = "assets/img/paw.gif";
 
     this.draw = function (canvas) {
         canvas.fillRect(0, 0, this.width, this.height);
 
         canvas.textAlign = "center";
         canvas.fillStyle = "#FFF";
-        canvas.font = "normal 35pt arial";
-        canvas.fillText("Kitty Clicker", this.width / 2 - 30, this.height / 2 - 50);
+        canvas.font = "bold 35pt arial";
+        canvas.drawImage(this.paw, this.width / 2 + 150, this.height / 2 - 130);
+        canvas.drawImage(this.paw, this.width / 2 - 180, this.height / 2 - 130);
+        canvas.fillText("Kitty Clicker", this.width / 2, this.height / 2 - 100);
 
         this.playButton.x = (this.width / 2) - (this.playButton.width / 2);
         this.playButton.y = this.height / 2;
