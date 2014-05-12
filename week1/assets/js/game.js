@@ -45,7 +45,7 @@ $(document).ready(function () {
 
 
     // ------ Event Listeners -------
-    window.addEventListener("click", function (e) {
+    $("#overlay").get(0).addEventListener("click", function (e) {
 
         var x = e.clientX;
         var y = e.clientY;
