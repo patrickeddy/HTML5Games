@@ -17,10 +17,10 @@ function Scorebar(width) {
 
         canvas.fillStyle = "#FFF";
         canvas.textBaseline = "top";
-        canvas.font = "normal 35pt Calibri";
-        canvas.fillText("Score: " + this.score, 5, 10);
         canvas.font = "normal 30pt Calibri";
-        canvas.fillText("Lives", this.width - 130, 0);
+        canvas.fillText("Score: " + this.score, 5, 20);
+        canvas.font = "normal 30pt Calibri";
+        canvas.fillText("Lives", this.width - 130, 5);
 
         for (var count = 0; count < this.lives; count++) {
             canvas.drawImage(this.livesIcon, this.width - (32 * count) - 70, 45);

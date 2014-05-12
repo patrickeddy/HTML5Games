@@ -19,7 +19,7 @@ $(document).ready(function () {
     var menuLoop;
 
     // Clear phrases
-    var phrases = ["Clear!", "Nice!", "Alright!", "Good!", "Hold on!", "Ahh!"];
+    var phrases = ["Clear!", "Nice!", "Alright!", "Good!", "Hold on!", "Ahh!", "Holy smokes!", "Batman!", "Rockin'"];
     var pickPhrase;
 
     // KITTY UPDATE VARIABLES
@@ -221,12 +221,12 @@ $(document).ready(function () {
             if (callCount == 0) {
                 canvas.fillStyle = "#FFF";
                 canvas.font = "bold 30pt arial";
-                canvas.fillText("Get ready!", GAME_WIDTH / 2 - 60, GAME_HEIGHT / 2);
+                canvas.fillText("Get ready!", GAME_WIDTH / 2 - 100, GAME_HEIGHT / 2);
             }
             if (num_kitties_visible == 0 && callCount != 0) {
                 canvas.fillStyle = "#FFF";
                 canvas.font = "bold 30pt arial";
-                canvas.fillText(pickPhrase, GAME_WIDTH / 2 - 40, GAME_HEIGHT / 2);
+                canvas.fillText(pickPhrase, (GAME_WIDTH / 2) - (pickPhrase.length * 10), GAME_HEIGHT / 2);
             }
 
         } else {
@@ -316,7 +316,7 @@ $(document).ready(function () {
 
             threshold *= 2;
             if (multiplier != 1.0) {
-                multiplier -= 0.5;
+                multiplier -= 0.2;
             }
             rate = rate * multiplier;
 

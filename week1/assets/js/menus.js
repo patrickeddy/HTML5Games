@@ -39,7 +39,9 @@ function PauseMenu(GAME_WIDTH, GAME_HEIGHT) {
         canvas.fillRect(0, 0, this.width, this.height);
         canvas.font = "normal 30pt arial";
         canvas.fillStyle = "#FFF";
-        canvas.fillText("Paused.", this.width * 0.40, this.height / 3);
+        canvas.fillText("Paused", this.width / 2 - 65, this.height / 2 - 60);
+        this.rButton.x = this.width / 2 - this.rButton.width / 2;
+        this.rButton.y = this.height / 2;
         this.rButton.draw(canvas);
     };
 }
