@@ -1,4 +1,4 @@
-$(document).ready(function () {
+function game() {
 
     // ----- ALL DEEZ VARIABLES ----- 
     var GAME_WIDTH = window.innerWidth;
@@ -330,4 +330,12 @@ $(document).ready(function () {
     // ~~~~~~~ END THE GAME METHODS ~~~~~~~
 
 
-});
+}
+if (window.onload != 'undefined') {
+    $(document).ready(function () {
+        game();
+    });
+
+} else {
+    game();
+}
