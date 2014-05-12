@@ -6,6 +6,12 @@ function StartScreen(GAME_WIDTH, GAME_HEIGHT) {
 
     this.draw = function (canvas) {
         canvas.fillRect(0, 0, this.width, this.height);
+
+        canvas.textAlign = "center";
+        canvas.fillStyle = "#FFF";
+        canvas.font = "normal 35pt arial";
+        canvas.fillText("Kitty Clicker", this.width / 2 - 30, this.height / 2 - 50);
+
         this.playButton.x = (this.width / 2) - (this.playButton.width / 2);
         this.playButton.y = this.height / 2;
         this.playButton.draw(canvas);
@@ -45,9 +51,9 @@ function GameOver(scorebar, GAME_WIDTH, GAME_HEIGHT) {
         canvas.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         canvas.font = "bold 35pt Calibri";
         canvas.fillStyle = "#F00";
-        canvas.fillText("OH NOES", GAME_WIDTH / 2 - (offset), GAME_HEIGHT / 4);
+        canvas.fillText("Game Over!", GAME_WIDTH / 2 - (offset), GAME_HEIGHT / 4);
         canvas.fillStyle = "#000";
-        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset + 15), GAME_HEIGHT * 10 / 25);
+        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset), (GAME_HEIGHT * 10) / 25);
 
 
         // Play again button

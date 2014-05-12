@@ -221,7 +221,7 @@ $(document).ready(function () {
             if (callCount == 0) {
                 canvas.fillStyle = "#FFF";
                 canvas.font = "bold 30pt arial";
-                canvas.fillText("Get ready!", GAME_WIDTH / 3, GAME_HEIGHT / 2);
+                canvas.fillText("Get ready!", GAME_WIDTH / 2 - 60, GAME_HEIGHT / 2);
             }
             if (num_kitties_visible == 0 && callCount != 0) {
                 canvas.fillStyle = "#FFF";

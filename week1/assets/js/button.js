@@ -22,13 +22,14 @@ function Button(text, x, y) {
 
     this.draw = function (canvas) {
 
-        this.text_x = this.x + this.width / 3.5;
+        this.text_x = this.x + this.width / 2;
         this.text_y = this.y + 60;
 
         canvas.fillStyle = this.bgColor;
         canvas.fillRect(this.x, this.y, this.width, this.height);
         canvas.fillStyle = this.textColor;
         canvas.font = this.font;
+        canvas.textAlign = "center";
         canvas.fillText(this.text, this.text_x, this.text_y);
     };
 
