@@ -45,11 +45,7 @@ $(document).ready(function () {
 
 
     // ------ Event Listeners -------
-<<<<<<< HEAD
-    $(document).click('body', function (e) {
-=======
     window.addEventListener("click", function (e) {
->>>>>>> dev/backgroundColors
 
         var x = e.clientX;
         var y = e.clientY;
