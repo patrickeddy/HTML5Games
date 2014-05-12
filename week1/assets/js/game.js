@@ -53,7 +53,7 @@ $(document).ready(function () {
         for (var kitty in kittens) {
 
             // If the kitten has not been hit, check the bounds and then add one if inside
-            if (!kittens[kitty].hit) {
+            if (!kittens[kitty].hit && running) {
                 kittens[kitty].checkBounds(x, y);
                 // If this kitty has been hit after check bounds, add one to the score
                 if (kittens[kitty].hit) {
