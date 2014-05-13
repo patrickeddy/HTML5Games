@@ -19,7 +19,7 @@ function game() {
     var menuLoop;
 
     // Clear phrases
-    var phrases = ["Clear!", "Nice!", "Alright!", "Good!", "Hold on!", "Ahh!", "Holy smokes!", "Batman!", "Rockin'"];
+    var phrases = ["Clear!", "All you got?", "Nice!", "Give it more!", "Good!", "Hold on!", "Blimey!", "Holy smokes!", "Batman!", "Rockin'"];
     var pickPhrase;
 
     // KITTY UPDATE VARIABLES
@@ -239,7 +239,7 @@ function game() {
     // INITIAL KITTY INTERVAL
     var kitty_interval = setInterval(function () {
         kittyBehavior();
-    }, 10000 / 2);
+    }, 10000 / 3);
 
     // Number of kittys on screen 
     var num_on_screen = 3;
@@ -308,15 +308,15 @@ function game() {
 
     // Change difficulty based on the number of calls (time based hardness)
     var threshold = 10;
-    var rate = 2;
-    var multiplier = 2.0;
+    var rate = 3;
+    var multiplier = 2.5;
 
     function setDifficulty(callCount) {
         if (callCount >= threshold) {
 
             threshold *= 2;
-            if (multiplier != 1.0) {
-                multiplier -= 0.2;
+            if (multiplier >= 1.5) {
+                multiplier -= 0.5;
             }
             rate = rate * multiplier;
 

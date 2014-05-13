@@ -11,10 +11,10 @@ function StartScreen(GAME_WIDTH, GAME_HEIGHT) {
 
         canvas.textAlign = "center";
         canvas.fillStyle = "#FFF";
-        canvas.font = "bold 35pt arial";
-        canvas.drawImage(this.paw, this.width / 2 + 150, this.height / 2 - 130);
-        canvas.drawImage(this.paw, this.width / 2 - 180, this.height / 2 - 130);
-        canvas.fillText("Kitty Clicker", this.width / 2, this.height / 2 - 100);
+        canvas.font = "bold 25pt arial";
+        canvas.drawImage(this.paw, this.width / 2 + 110, this.height / 2 - 100);
+        canvas.drawImage(this.paw, this.width / 2 - 140, this.height / 2 - 100);
+        canvas.fillText("Kitty Clicker", this.width / 2, this.height / 2 - 70);
 
         this.playButton.x = (this.width / 2) - (this.playButton.width / 2);
         this.playButton.y = this.height / 2;
@@ -50,20 +50,18 @@ function GameOver(scorebar, GAME_WIDTH, GAME_HEIGHT) {
 
     this.paButton = new Button("Play again?");
 
-    var offset = 140;
-
-
     this.draw = function (canvas) {
         canvas.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-        canvas.font = "bold 35pt Calibri";
+        canvas.font = "bold 25pt arial";
         canvas.fillStyle = "#F00";
-        canvas.fillText("Game Over!", GAME_WIDTH / 2 - (offset), GAME_HEIGHT / 4);
+        canvas.textAlign = "center";
+        canvas.fillText("Game Over!", GAME_WIDTH / 2, GAME_HEIGHT / 4);
         canvas.fillStyle = "#000";
-        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2 - (offset), (GAME_HEIGHT * 10) / 25);
+        canvas.fillText("Your score: " + scorebar.score, GAME_WIDTH / 2, (GAME_HEIGHT * 10) / 25);
 
 
         // Play again button
-        this.paButton.x = GAME_WIDTH / 2 - offset;
+        this.paButton.x = GAME_WIDTH / 2 - this.paButton.width / 2;
         this.paButton.y = GAME_HEIGHT / 2;
         this.paButton.draw(canvas);
     };
