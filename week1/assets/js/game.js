@@ -45,7 +45,7 @@ function game() {
 
 
     // ------ Event Listeners -------
-    $("#overlay").get(0).addEventListener("click", function (e) {
+    $("#overlay").get(0).addEventListener("mousedown", function (e) {
 
         var x = e.clientX;
         var y = e.clientY;
