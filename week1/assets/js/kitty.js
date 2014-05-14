@@ -10,14 +10,13 @@ function Kitty(x, y) {
     // Init variables based on device width
     this.WIDTH = 100;
     this.HEIGHT = 100;
-    this.image = new Image();
-    this.image.src = "assets/img/cat-sm.jpeg";
+    var pic = new Image();
 
     this.hit = false;
 
     this.draw = function (canvas) {
         if (!this.hit) {
-            canvas.drawImage(this.image, this.x, this.y);
+            canvas.drawImage(pic, this.x, this.y);
         }
     }
 
@@ -28,10 +27,21 @@ function Kitty(x, y) {
             }
         }
     }
+    this.checkSize = function (GAME_WIDTH, GAME_HEIGHT) {
+        if (GAME_WIDTH > 768) {
+            this.isSmall = false;
+        } else {
+            this.isSmall = true;
+        }
 
-    this.makeBig = function () {
-        this.WIDTH = 250;
-        this.HEIGHT = 250;
-        this.image.src = "assets/img/cat.jpeg";
+        if (this.isSmall) {
+            this.WIDTH = 100;
+            this.HEIGHT = 100;
+            pic.src = "assets/img/cat-sm.jpeg";
+        } else {
+            this.WIDTH = 250;
+            this.HEIGHT = 250;
+            pic.src = "assets/img/cat.jpeg";
+        }
     }
 }

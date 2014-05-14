@@ -28,13 +28,9 @@ function game() {
 
     var kittens = [];
     for (var count = 1; count <= 3; count++) {
-        if (GAME_WIDTH < 768) {
-            kittens.push(new Kitty());
-        } else if (GAME_WIDTH > 768) {
-            var kitty = new Kitty();
-            kitty.makeBig();
-            kittens.push(kitty);
-        }
+        var kitty = new Kitty();
+        kitty.checkSize(GAME_WIDTH, GAME_HEIGHT);
+        kittens.push(kitty);
     }
 
 
@@ -98,6 +94,12 @@ function game() {
             pause();
         }
     });
+
+    window.addEventListener('resize', function () {
+        for (var kitty in kittens) {
+            kittens[kitty].checkSize(GAME_WIDTH, GAME_HEIGHT);
+        }
+    }, false);
 
 
     // ~~~~~~~ ALL DEM GAME METHODS DOWN HERR ~~~~~~~
