@@ -4,8 +4,7 @@ const SAFE_ZONE_HEIGHT = 960;
 var game = new Phaser.Game(SAFE_ZONE_WIDTH, SAFE_ZONE_HEIGHT, Phaser.AUTO, '', {
     preload: preload,
     create: create,
-    update: update,
-    render: render
+    update: update
 });
 
 var running = true;
@@ -14,6 +13,8 @@ var isPressed = false;
 var player;
 var coconut;
 var bg;
+var score = 0;
+var scoreTimer;
 
 
 $(document).hasResized(function () {
@@ -49,6 +50,8 @@ function create() {
 
     // Adding a background image
     bg = game.add.image(0, 0, 'bg');
+    bg.width = game.stage.bounds.width;
+    bg.height = game.stage.bounds.height;
 
     // Adding the player
     player = game.add.sprite(game.world.centerX, game.world.height - 100, 'player');
@@ -80,6 +83,18 @@ function create() {
     coconut.enableBody = true;
     coconut.body.collideWorldBounds = true;
     coconut.body.bounce.setTo(1.1, 1.1);
+
+    var scoreText = "Score: " + score + "s";
+    var scoreStyle = {
+        font: "5em Arial",
+        fill: "#FFF",
+        align: "left"
+    };
+    this.scoreLabel = game.add.text(10, 10, scoreText, scoreStyle);
+    scoreTimer = game.time.create(false);
+    scoreTimer.loop(1000, function () {
+        score++
+    }, this);
 }
 
 function playerListener() {
@@ -93,24 +108,10 @@ function playerListener() {
         if (player.x != input_x || player.y != input_y) {
             player.x = input_x;
             player.y = input_y;
-            //            if (player.x < input_x - diam && player.y < input_y - diam) {
-            //                player.x += speed;
-            //                player.y += speed;
-            //            }
-            //            if (player.x > input_x + diam && player.y > input_y + diam) {
-            //                player.x -= speed;
-            //                player.y -= speed;
-            //            }
-            //            if (player.x > input_x + diam && player.y < input_y - diam) {
-            //                player.x -= speed;
-            //                player.y += speed;
-            //            }
-            //            if (player.x < input_x - diam && player.y > input_y + diam) {
-            //                player.x += speed;
-            //                player.y -= speed;
-            //            }
         }
-
+        if (!scoreTimer.running) {
+            scoreTimer.start();
+        }
         game.physics.arcade.accelerateToObject(coconut, player, 120);
     }
 }
@@ -130,6 +131,7 @@ function update() {
     if (running) {
         playerListener();
         checkScreenSize();
+        this.scoreLabel.text = "Score: " + score + "s";
         game.physics.arcade.collide(player, coconut, hitCoconut, null, this);
     }
 }
@@ -137,15 +139,36 @@ function update() {
 function hitCoconut(body1, body2) {
     running = false;
 
-    var text = "You lose";
+    // Define then add the overlay
+    var graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
+    graphicOverlay.beginFill(0x000000, 0.7);
+    graphicOverlay.drawRect(0, 0, game.world.width, game.world.height);
+    graphicOverlay.endFill();
+
+    this.overlay = this.game.add.image(-10, -10, graphicOverlay.generateTexture());
+
+    // Add the lose text
+    var text = "Oh snap!";
     var style = {
         font: "10em Arial",
         fill: "#F00",
         align: "center"
     };
 
-    var t = game.add.text(game.world.centerX - 180, 10, text, style);
-    var playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY + 100, 'playagain', resetGame, this);
+    var t = game.add.text(game.world.centerX - 200, game.world.centerY - 250, text, style);
+
+    text = "Score: " + score;
+    style = {
+        font: "5em Arial",
+        fill: "#FFF",
+        align: "center"
+    };
+
+    // Add the final score
+    game.add.text(game.world.centerX - 100, game.world.centerY - 100, text, style);
+
+    // Play again button
+    var playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY, 'playagain', resetGame, this);
 
 
 
