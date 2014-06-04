@@ -57,11 +57,11 @@ function create() {
     coconut = game.add.sprite(game.world.centerX, 50, 'coconut');
     coconut.anchor.set(0.5);
 
-    bg.inputEnabled = true;
-    bg.events.onInputDown.add(function () {
+    player.inputEnabled = true;
+    player.events.onInputDown.add(function () {
         isPressed = true;
     }, this);
-    bg.events.onInputUp.add(function () {
+    player.events.onInputUp.add(function () {
         isPressed = false;
     }, this);
 
@@ -91,7 +91,8 @@ function playerListener() {
         var input_y = game.input.y;
 
         if (player.x != input_x || player.y != input_y) {
-            game.physics.arcade.moveToXY(player, input_x, input_y, 500);
+            player.x = input_x;
+            player.y = input_y;
             //            if (player.x < input_x - diam && player.y < input_y - diam) {
             //                player.x += speed;
             //                player.y += speed;
@@ -110,7 +111,7 @@ function playerListener() {
             //            }
         }
 
-        game.physics.arcade.accelerateToObject(coconut, player);
+        game.physics.arcade.accelerateToObject(coconut, player, 120);
     }
 }
 
