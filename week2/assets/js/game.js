@@ -1,5 +1,5 @@
-const SAFE_ZONE_WIDTH = 768;
-const SAFE_ZONE_HEIGHT = 1280;
+const SAFE_ZONE_WIDTH = 640;
+const SAFE_ZONE_HEIGHT = 960;
 
 var game = new Phaser.Game(SAFE_ZONE_WIDTH, SAFE_ZONE_HEIGHT, Phaser.AUTO, '', {
     preload: preload,
@@ -9,11 +9,11 @@ var game = new Phaser.Game(SAFE_ZONE_WIDTH, SAFE_ZONE_HEIGHT, Phaser.AUTO, '', {
 });
 
 var running = true;
+var isPressed = false;
 
 var player;
 var coconut;
 var bg;
-var isPressed = false;
 
 
 $(document).hasResized(function () {
@@ -43,8 +43,8 @@ function create() {
     // Aligning the game correctly for all devices
     game.scale.pageAlignVertically = true;
     game.scale.pageAlignHorizontally = true;
-    game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
     game.stage.forcePortrait = true;
+    window.checkScreenSize();
     window.resizeGame();
 
     // Adding a background image
@@ -115,9 +115,21 @@ function playerListener() {
     }
 }
 
+function checkScreenSize() {
+    var ww = window.innerWidth;
+    var wh = window.innerHeight;
+
+    if (ww / wh >= 4 / 3) {
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    } else {
+        game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+    }
+}
+
 function update() {
     if (running) {
         playerListener();
+        checkScreenSize();
         game.physics.arcade.collide(player, coconut, hitCoconut, null, this);
     }
 }
@@ -132,7 +144,7 @@ function hitCoconut(body1, body2) {
         align: "center"
     };
 
-    var t = game.add.text(game.world.centerX - 180, 0, text, style);
+    var t = game.add.text(game.world.centerX - 180, 10, text, style);
     var playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY + 100, 'playagain', resetGame, this);
 
 
