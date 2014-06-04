@@ -4,7 +4,8 @@ const SAFE_ZONE_HEIGHT = 1280;
 var game = new Phaser.Game(SAFE_ZONE_WIDTH, SAFE_ZONE_HEIGHT, Phaser.AUTO, '', {
     preload: preload,
     create: create,
-    update: update
+    update: update,
+    render: render
 });
 
 var running = true;
@@ -81,36 +82,32 @@ function create() {
     coconut.body.bounce.setTo(1.1, 1.1);
 }
 
-function setPlayerXY(x, y) {
-    player.x = x;
-    player.y = y;
-}
-
 function playerListener() {
-    var speed = 10;
+    var speed = 50;
 
     if (isPressed) {
 
         var input_x = game.input.x;
         var input_y = game.input.y;
 
-        if (player.x != input_x && player.y != input_y) {
-            if (player.x < input_x && player.y < input_y) {
-                player.x += speed;
-                player.y += speed;
-            }
-            if (player.x > input_x && player.y > input_y) {
-                player.x -= speed;
-                player.y -= speed;
-            }
-            if (player.x > input_x && player.y < input_y) {
-                player.x -= speed;
-                player.y += speed;
-            }
-            if (player.x < input_x && player.y > input_y) {
-                player.x += speed;
-                player.y -= speed;
-            }
+        if (player.x != input_x || player.y != input_y) {
+            game.physics.arcade.moveToXY(player, input_x, input_y, 500);
+            //            if (player.x < input_x - diam && player.y < input_y - diam) {
+            //                player.x += speed;
+            //                player.y += speed;
+            //            }
+            //            if (player.x > input_x + diam && player.y > input_y + diam) {
+            //                player.x -= speed;
+            //                player.y -= speed;
+            //            }
+            //            if (player.x > input_x + diam && player.y < input_y - diam) {
+            //                player.x -= speed;
+            //                player.y += speed;
+            //            }
+            //            if (player.x < input_x - diam && player.y > input_y + diam) {
+            //                player.x += speed;
+            //                player.y -= speed;
+            //            }
         }
 
         game.physics.arcade.accelerateToObject(coconut, player);
@@ -139,6 +136,11 @@ function hitCoconut(body1, body2) {
 
 
 
+}
+
+function render() {
+    game.debug.body(coconut);
+    game.debug.body(player);
 }
 
 function resetGame() {
