@@ -21,6 +21,21 @@ var bg;
 var score = 0;
 var scoreTimer;
 
+var highscoresArray = [];
+var highscoreText = "";
+
+//localStorage.clear();
+
+if (localStorage.getItem('highscores') == null) {
+    var newScoresArray = [];
+    localStorage.setItem('highscores', JSON.stringify({
+        'highscores': newScoresArray
+    }));
+} else {
+    highscoresArray = (JSON.parse(localStorage.getItem('highscores'))).highscores;
+}
+
+
 /*
      ============= Preload ==============
 */
@@ -32,7 +47,7 @@ function preload() {
     game.load.image('coconut', 'assets/img/coconut.png');
     game.load.image('playagain', 'assets/img/playagain.png');
     game.load.image('startbutton', 'assets/img/start.png');
-    game.load.image('how', 'assets/img/how.png');
+    game.load.image('highscorebutton', 'assets/img/highscore.png');
 }
 
 function create() {
@@ -127,7 +142,7 @@ function create() {
     game.physics.enable(coconut, Phaser.Physics.ARCADE);
     coconut.enableBody = true;
     coconut.body.collideWorldBounds = true;
-    coconut.body.bounce.setTo(1.1, 1.1);
+    coconut.body.bounce.setTo(1.2, 1.2);
 
 
     // Initiate start menu
@@ -160,7 +175,7 @@ function startMenu() {
 
     this.title = game.add.text(game.world.centerX - 250, game.world.centerY - 200, text, style);
 
-    // Create button that goes over screen
+    // Create Start Dodging button that goes over screen
     this.startButton = game.add.button(game.world.centerX - 120, game.world.centerY - 50, 'startbutton', function () {
         // Set running to true
         running = true;
@@ -168,9 +183,32 @@ function startMenu() {
         this.startMenuOverlay.visible = false;
         this.startButton.visible = false;
         this.title.visible = false;
+        this.highscoreButton.visible = false;
 
     }, this);
     startButton.inputEnabled = true;
+
+    for (var current in highscoresArray) {
+        highscoreText += highscores[current] + "";
+    }
+    var style = {
+        font: "5em Arial",
+        fill: "#FFF",
+        align: "center"
+    };
+    this.highscores = game.add.text(game.world.centerX - 30, game.world.centerY + 150, highscoreText, style);
+    this.highscores.visible = false;
+
+    // Create button that goes over screen
+    this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 80, 'highscorebutton', function () {
+        if (!this.highscores.visible) {
+            this.highscores.visible = true;
+        } else {
+            this.highscores.visible = false;
+        }
+    }, this);
+    this.highscoreButton.inputEnabled = true;
+
 }
 
 /*
@@ -184,7 +222,7 @@ function resizeGame() {
 
 }
 
-$(document).hasResized(function () {
+$(document).resize(function () {
     resizeGame();
 });
 
@@ -194,18 +232,17 @@ $(document).hasResized(function () {
 
 // Is called by update(), but is attentive to the boolean isPressed
 function playerListener() {
-    var speed = 50;
 
     // Help text
-    var text = "Drag your player to play";
+    var text = "Dodge the coconut!";
     var style = {
-        font: "3em Arial",
+        font: "5em Arial",
         fill: "#000",
         align: "center"
     };
     // Help text for game start
     if (this.helpText == null)
-        this.helpText = game.add.text(player.x - 150, player.y - 120, text, style);
+        this.helpText = game.add.text(player.x - 220, player.y - 120, text, style);
 
     // Actually checks if the player is pressed down
     if (isPressed) {
@@ -214,14 +251,14 @@ function playerListener() {
         var input_x = game.input.x;
         var input_y = game.input.y;
 
-        if (player.x != input_x || player.y != input_y) {
+        if (player.x != input_x || player.y != input_y && player.checkWorldBounds) {
             player.x = input_x;
             player.y = input_y;
         }
         if (!scoreTimer.running) {
             scoreTimer.start();
         }
-        game.physics.arcade.accelerateToObject(coconut, player, 120);
+        game.physics.arcade.accelerateToObject(coconut, player, 180);
     }
 }
 
@@ -258,6 +295,17 @@ function update() {
 */
 function hitCoconut(body1, body2) {
     running = false;
+    //
+    //    if (score > highscores[0]) {
+    //        var cursor = 0;
+    //        while (score > highscores[cursor]) {
+    //            cursor++;
+    //        }
+    //        highscores[cursor] = score;
+    //    }
+    localStorage.setItem('highscores', JSON.stringify({
+        'highscores': highscoresArray
+    }));
 
     // Define then add the overlay
     var graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
@@ -285,7 +333,7 @@ function hitCoconut(body1, body2) {
     };
 
     // Add the final score
-    game.add.text(game.world.centerX - 100, game.world.centerY - 120, text, style);
+    game.add.text(game.world.centerX - 100, game.world.centerY - 100, text, style);
 
     // Play again button
     var playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY, 'playagain', resetGame, this);
