@@ -7,39 +7,42 @@ var game = new Phaser.Game(SAFE_ZONE_WIDTH, SAFE_ZONE_HEIGHT, Phaser.AUTO, '', {
     update: update
 });
 
-var running = true;
+/*
+    ============= Variables ==============
+*/
+
+var running = false;
 var isPressed = false;
 
 var player;
 var coconut;
 var bg;
+
 var score = 0;
 var scoreTimer;
 
-
-$(document).hasResized(function () {
-    resizeGame();
-});
-
-
+/*
+     ============= Preload ==============
+*/
 function preload() {
+
+    // Loading all the game assets here
     game.load.image('bg', 'assets/img/bg.png');
     game.load.image('player', 'assets/img/player.png');
     game.load.image('coconut', 'assets/img/coconut.png');
     game.load.image('playagain', 'assets/img/playagain.png');
-}
-
-function resizeGame() {
-
-    game.scale.setExactFit();
-    game.scale.refresh();
-
+    game.load.image('startbutton', 'assets/img/start.png');
+    game.load.image('how', 'assets/img/how.png');
 }
 
 function create() {
     // Some browsers have a useragent margin. Override this.
     $("body").css("margin", "0");
 
+
+    /*
+        ============= Scale ==============
+    */
 
     // Aligning the game correctly for all devices
     game.scale.pageAlignVertically = true;
@@ -48,19 +51,56 @@ function create() {
     window.checkScreenSize();
     window.resizeGame();
 
+    /*
+        ============= Sprites ==============
+    */
+
     // Adding a background image
     bg = game.add.image(0, 0, 'bg');
     bg.width = game.stage.bounds.width;
     bg.height = game.stage.bounds.height;
 
-    // Adding the player
+
+
+    /*
+        ======= Game Score =======
+    */
+
+    // Creating the score text attributes
+    var scoreText = score;
+    var scoreStyle = {
+        font: "15em Arial",
+        fill: "#FFF",
+        align: "center"
+    };
+    // Adding the scoreLabel to the game
+    this.scoreLabel = game.add.text(game.world.centerX, game.world.centerY - 100, scoreText, scoreStyle);
+
+    // Setting the score timer
+    scoreTimer = game.time.create(false);
+    scoreTimer.loop(1000, function () {
+        score++
+    }, this);
+
+
+    // Adding the player sprite
     player = game.add.sprite(game.world.centerX, game.world.height - 100, 'player');
+    // Setting it's anchor to the center
     player.anchor.set(0.5);
 
+    // Adding the coconut sprite
     coconut = game.add.sprite(game.world.centerX, 50, 'coconut');
+    // Setting it's anchor to the center
     coconut.anchor.set(0.5);
 
+    /*
+        ============= Input ==============
+    */
+
+    //Enabling input on player so that the user can drag to move
     player.inputEnabled = true;
+
+    // Boolean of isPressed is set depending on the state of the onInputDown event
     player.events.onInputDown.add(function () {
         isPressed = true;
     }, this);
@@ -68,6 +108,11 @@ function create() {
         isPressed = false;
     }, this);
 
+    /*
+    
+        ============= Physics ==============
+        
+    */
 
     // Enabling arcade physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -84,23 +129,87 @@ function create() {
     coconut.body.collideWorldBounds = true;
     coconut.body.bounce.setTo(1.1, 1.1);
 
-    var scoreText = "Score: " + score + "s";
-    var scoreStyle = {
-        font: "5em Arial",
-        fill: "#FFF",
-        align: "left"
-    };
-    this.scoreLabel = game.add.text(10, 10, scoreText, scoreStyle);
-    scoreTimer = game.time.create(false);
-    scoreTimer.loop(1000, function () {
-        score++
-    }, this);
+
+    // Initiate start menu
+    startMenu();
 }
 
+/*
+        ============= Start Menu ==============  
+*/
+
+function startMenu() {
+
+    // Create overlay and add to screen
+    var startMenuOverlay = new Phaser.Graphics(this.game, 0, 0);
+    startMenuOverlay.beginFill(0x000000, 0.9);
+    startMenuOverlay.drawRect(0, 0, game.world.width, game.world.height);
+    startMenuOverlay.endFill();
+
+    this.startMenuOverlay = this.game.add.image(-10, -10, startMenuOverlay.generateTexture());
+
+    // End of Overlay
+
+    // Add the lose text
+    var text = "Dodge Coconut";
+    var style = {
+        font: "7em Arial",
+        fill: "#FFF",
+        align: "center"
+    };
+
+    this.title = game.add.text(game.world.centerX - 250, game.world.centerY - 200, text, style);
+
+    // Create button that goes over screen
+    this.startButton = game.add.button(game.world.centerX - 120, game.world.centerY - 50, 'startbutton', function () {
+        // Set running to true
+        running = true;
+        // Set all overlay sprites invisible
+        this.startMenuOverlay.visible = false;
+        this.startButton.visible = false;
+        this.title.visible = false;
+
+    }, this);
+    startButton.inputEnabled = true;
+}
+
+/*
+        ============= Window Resize ==============  
+*/
+
+function resizeGame() {
+
+    game.scale.setExactFit();
+    game.scale.refresh();
+
+}
+
+$(document).hasResized(function () {
+    resizeGame();
+});
+
+/*
+        ============= Listeners ==============  
+*/
+
+// Is called by update(), but is attentive to the boolean isPressed
 function playerListener() {
     var speed = 50;
 
+    // Help text
+    var text = "Drag your player to play";
+    var style = {
+        font: "3em Arial",
+        fill: "#000",
+        align: "center"
+    };
+    // Help text for game start
+    if (this.helpText == null)
+        this.helpText = game.add.text(player.x - 150, player.y - 120, text, style);
+
+    // Actually checks if the player is pressed down
     if (isPressed) {
+        if (helpText.visible) helpText.visible = false;
 
         var input_x = game.input.x;
         var input_y = game.input.y;
@@ -127,15 +236,26 @@ function checkScreenSize() {
     }
 }
 
+/*
+        ============= Update ==============  
+*/
 function update() {
     if (running) {
         playerListener();
         checkScreenSize();
-        this.scoreLabel.text = "Score: " + score + "s";
+
+        // Scorelabel proper updating 
+        this.scoreLabel.text = score;
+        this.scoreLabel.x = game.world.centerX - this.scoreLabel.width / 2;
+
+        // If the player and coconut collide, call hitCoconut
         game.physics.arcade.collide(player, coconut, hitCoconut, null, this);
     }
 }
 
+/*
+        ============= Collision ==============  
+*/
 function hitCoconut(body1, body2) {
     running = false;
 
@@ -157,7 +277,7 @@ function hitCoconut(body1, body2) {
 
     var t = game.add.text(game.world.centerX - 200, game.world.centerY - 250, text, style);
 
-    text = "Score: " + score;
+    text = "Score: " + score + "s";
     style = {
         font: "5em Arial",
         fill: "#FFF",
@@ -165,19 +285,15 @@ function hitCoconut(body1, body2) {
     };
 
     // Add the final score
-    game.add.text(game.world.centerX - 100, game.world.centerY - 100, text, style);
+    game.add.text(game.world.centerX - 100, game.world.centerY - 120, text, style);
 
     // Play again button
     var playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY, 'playagain', resetGame, this);
 
-
-
 }
-
-function render() {
-    game.debug.body(coconut);
-    game.debug.body(player);
-}
+/*
+        ============= Reset ==============  
+*/
 
 function resetGame() {
     location.reload();
