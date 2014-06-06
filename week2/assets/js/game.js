@@ -267,7 +267,7 @@ function playerListener() {
         if (!scoreTimer.running) {
             scoreTimer.start();
         }
-        game.physics.arcade.accelerateToObject(coconut, player, 180);
+        game.physics.arcade.accelerateToObject(coconut, player, 240);
     }
 }
 
@@ -309,17 +309,12 @@ function hitCoconut(body1, body2) {
         return a - b
     });
     if (highscoresArray.length >= 3) {
-        var current = 1;
-        while (score > highscoresArray[current]) {
-            current++;
-        }
-        highscoresArray[current] = score;
+        highscoresArray = arrayTrim(highscoresArray, 2);
+    }
+    if (highscoresArray[0] == 0) {
+        highscoresArray[0] = score;
     } else {
-        if (highscoresArray[0] == 0) {
-            highscoresArray[0] = score;
-        } else {
-            highscoresArray.push(score);
-        }
+        highscoresArray.push(score);
     }
     localStorage.setItem('highscores', JSON.stringify(highscoresArray));
 
@@ -358,6 +353,17 @@ function hitCoconut(body1, body2) {
 /*
         ============= Reset ==============  
 */
+
+function arrayTrim(array, trimTo) {
+    array.sort(function (a, b) {
+        return b - a;
+    });
+    var trimmedArray = [];
+    for (var current = 0; current < trimTo; current++) {
+        trimmedArray.push(array[current]);
+    }
+    return trimmedArray;
+}
 
 function resetGame() {
     location.reload();
