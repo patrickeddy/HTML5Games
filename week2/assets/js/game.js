@@ -104,7 +104,7 @@ function create() {
     // Adding the coconut sprite
     coconut = game.add.sprite(game.world.centerX, 50, 'coconut');
     // Setting it's anchor to the center
-    coconut.anchor.set(0.5);
+    coconut.anchor.setTo(0.5);
 
     /*
         ============= Input ==============
@@ -135,13 +135,20 @@ function create() {
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.enableBody = true;
     player.body.collideWorldBounds = true;
+    player.body.width = 80;
+    player.body.height = 80;
+    player.body.offsetLeft = 10;
+    player.body.offsetRight = 10;
 
     // Coconut stuff
     game.physics.enable(coconut, Phaser.Physics.ARCADE);
     coconut.enableBody = true;
     coconut.body.collideWorldBounds = true;
     coconut.body.bounce.setTo(1.3, 1.3);
-
+    coconut.body.width = 80;
+    coconut.body.height = 80;
+    coconut.body.offsetLeft = 10;
+    coconut.body.offsetRight = 10;
 
     // Initiate start menu
     startMenu();
@@ -350,7 +357,6 @@ function hitCoconut(body1, body2) {
 /*
         ============= Reset ==============  
 */
-
 
 function resetGame() {
     location.reload();
