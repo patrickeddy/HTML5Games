@@ -27,12 +27,10 @@ var highscoreText = "";
 //localStorage.clear();
 
 if (localStorage.getItem('highscores') == null) {
-    var newScoresArray = [];
-    localStorage.setItem('highscores', JSON.stringify({
-        'highscores': newScoresArray
-    }));
+    var blankArray = [0];
+    localStorage.setItem('highscores', JSON.stringify(blankArray));
 } else {
-    highscoresArray = (JSON.parse(localStorage.getItem('highscores'))).highscores;
+    highscoresArray = JSON.parse(localStorage.getItem('highscores'));
 }
 
 
@@ -142,7 +140,7 @@ function create() {
     game.physics.enable(coconut, Phaser.Physics.ARCADE);
     coconut.enableBody = true;
     coconut.body.collideWorldBounds = true;
-    coconut.body.bounce.setTo(1.2, 1.2);
+    coconut.body.bounce.setTo(1.3, 1.3);
 
 
     // Initiate start menu
@@ -188,15 +186,18 @@ function startMenu() {
     }, this);
     startButton.inputEnabled = true;
 
-    for (var current in highscoresArray) {
-        highscoreText += highscores[current] + "";
+    highscoresArray.sort(function (a, b) {
+        return b - a
+    });
+    for (var current = 0; current < highscoresArray.length; current++) {
+        highscoreText += highscoresArray[current] + "\n";
     }
     var style = {
-        font: "5em Arial",
+        font: "4em Arial",
         fill: "#FFF",
         align: "center"
     };
-    this.highscores = game.add.text(game.world.centerX - 30, game.world.centerY + 150, highscoreText, style);
+    this.highscores = game.add.text(game.world.centerX - 20, game.world.centerY + 150, highscoreText, style);
     this.highscores.visible = false;
 
     // Create button that goes over screen
@@ -295,17 +296,24 @@ function update() {
 */
 function hitCoconut(body1, body2) {
     running = false;
-    //
-    //    if (score > highscores[0]) {
-    //        var cursor = 0;
-    //        while (score > highscores[cursor]) {
-    //            cursor++;
-    //        }
-    //        highscores[cursor] = score;
-    //    }
-    localStorage.setItem('highscores', JSON.stringify({
-        'highscores': highscoresArray
-    }));
+
+    highscoresArray.sort(function (a, b) {
+        return a - b
+    });
+    if (highscoresArray.length >= 3) {
+        var current = 1;
+        while (score > highscoresArray[current]) {
+            current++;
+        }
+        highscoresArray[current] = score;
+    } else {
+        if (highscoresArray[0] == 0) {
+            highscoresArray[0] = score;
+        } else {
+            highscoresArray.push(score);
+        }
+    }
+    localStorage.setItem('highscores', JSON.stringify(highscoresArray));
 
     // Define then add the overlay
     var graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
@@ -342,6 +350,7 @@ function hitCoconut(body1, body2) {
 /*
         ============= Reset ==============  
 */
+
 
 function resetGame() {
     location.reload();
