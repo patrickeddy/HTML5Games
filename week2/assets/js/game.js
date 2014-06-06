@@ -189,6 +189,7 @@ function startMenu() {
         this.startButton.visible = false;
         this.title.visible = false;
         this.highscoreButton.visible = false;
+        this.highscores.visible = false;
 
     }, this);
     startButton.inputEnabled = true;
