@@ -33,7 +33,6 @@ if (localStorage.getItem('highscores') == null) {
     highscoresArray = JSON.parse(localStorage.getItem('highscores'));
 }
 
-
 /*
      ============= Preload ==============
 */
@@ -321,7 +320,11 @@ function hitCoconut(body1, body2) {
     if (highscoresArray[0] == 0 || score > highscoresArray[0]) {
         highscoresArray[0] = score;
     }
-    localStorage.setItem('highscores', JSON.stringify(highscoresArray));
+    try {
+        localStorage.setItem('highscores', JSON.stringify(highscoresArray));
+    } catch (e) {
+        alert("Error saving highscore.\n" + e.message);
+    }
 
     // Define then add the overlay
     var graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
