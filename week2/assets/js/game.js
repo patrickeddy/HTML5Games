@@ -63,6 +63,8 @@ function create() {
     window.checkScreenSize();
     window.resizeGame();
 
+    game.input.maxPointers = 1;
+
     /*
         ============= Sprites ==============
     */
