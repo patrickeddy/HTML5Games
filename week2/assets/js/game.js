@@ -234,6 +234,7 @@ function resizeGame() {
 }
 
 $(document).resize(function () {
+    checkScreenSize();
     resizeGame();
 });
 
