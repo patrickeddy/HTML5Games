@@ -149,6 +149,7 @@ function create() {
     coconut.body.height = 80;
     coconut.body.offsetLeft = 10;
     coconut.body.offsetRight = 10;
+    coconut.body.drag = 0;
 
     // Initiate start menu
     startMenu();
@@ -267,7 +268,7 @@ function playerListener() {
         if (!scoreTimer.running) {
             scoreTimer.start();
         }
-        game.physics.arcade.accelerateToObject(coconut, player, 240);
+        game.physics.arcade.accelerateToObject(coconut, player, 600);
     }
 }
 
