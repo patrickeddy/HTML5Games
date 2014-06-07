@@ -296,6 +296,9 @@ function update() {
 
         // If the player and coconut collide, call hitCoconut
         game.physics.arcade.collide(player, coconut, hitCoconut, null, this);
+        game.physics.arcade.overlap(player, coconut, hitCoconut, null, this);
+
+
     }
 }
 
