@@ -313,12 +313,13 @@ function hitCoconut(body1, body2) {
         return a - b
     });
     if (highscoresArray.length >= 3) {
-        highscoresArray = arrayTrim(highscoresArray, 2);
-    }
-    if (highscoresArray[0] == 0) {
-        highscoresArray[0] = score;
+        highscoresArray.push(score);
+        highscoresArray = arrayTrim(highscoresArray, 3);
     } else {
         highscoresArray.push(score);
+    }
+    if (highscoresArray[0] == 0 || score > highscoresArray[0]) {
+        highscoresArray[0] = score;
     }
     localStorage.setItem('highscores', JSON.stringify(highscoresArray));
 
