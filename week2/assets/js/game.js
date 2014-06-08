@@ -120,6 +120,9 @@ function create() {
     player.events.onInputUp.add(function () {
         isPressed = false;
     }, this);
+    player.events.onInputOver.add(function () {
+        isPressed = true;
+    }, this);
 
     /*
     
