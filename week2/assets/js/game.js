@@ -45,6 +45,7 @@ function preload() {
     game.load.image('playagain', 'assets/img/playagain.png');
     game.load.image('startbutton', 'assets/img/start.png');
     game.load.image('highscorebutton', 'assets/img/highscore.png');
+    game.load.image('highscorebg', 'assets/img/highscorebg.png');
 }
 
 function create() {
@@ -164,7 +165,7 @@ function startMenu() {
 
     // Create overlay and add to screen
     var startMenuOverlay = new Phaser.Graphics(this.game, 0, 0);
-    startMenuOverlay.beginFill(0x000000, 0.9);
+    startMenuOverlay.beginFill(0x000000, 1);
     startMenuOverlay.drawRect(0, 0, game.world.width, game.world.height);
     startMenuOverlay.endFill();
 
@@ -183,7 +184,7 @@ function startMenu() {
     this.title = game.add.text(game.world.centerX - 250, game.world.centerY - 200, text, style);
 
     // Create Start Dodging button that goes over screen
-    this.startButton = game.add.button(game.world.centerX - 120, game.world.centerY - 50, 'startbutton', function () {
+    this.startButton = game.add.button(game.world.centerX - 125, game.world.centerY - 50, 'startbutton', function () {
         // Set running to true
         running = true;
         // Set all overlay sprites invisible
@@ -192,9 +193,13 @@ function startMenu() {
         this.title.visible = false;
         this.highscoreButton.visible = false;
         this.highscores.visible = false;
+        this.highscorebg.visible = false;
 
     }, this);
     startButton.inputEnabled = true;
+
+    this.highscoresbg = game.add.image(game.world.centerX - 128, game.world.centerY + 80, 'highscorebg');
+    this.highscoresbg.visible = false;
 
     highscoresArray.sort(function (a, b) {
         return b - a
@@ -211,11 +216,13 @@ function startMenu() {
     this.highscores.visible = false;
 
     // Create button that goes over screen
-    this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 80, 'highscorebutton', function () {
+    this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 85, 'highscorebutton', function () {
         if (!this.highscores.visible) {
             this.highscores.visible = true;
+            this.highscoresbg.visible = true;
         } else {
             this.highscores.visible = false;
+            this.highscoresbg.visible = false;
         }
     }, this);
     this.highscoreButton.inputEnabled = true;
