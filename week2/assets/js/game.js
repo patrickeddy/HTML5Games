@@ -75,8 +75,6 @@ function create() {
     bg.width = game.stage.bounds.width;
     bg.height = game.stage.bounds.height;
 
-
-
     /*
         ======= Game Score =======
     */
@@ -193,7 +191,7 @@ function startMenu() {
         this.title.visible = false;
         this.highscoreButton.visible = false;
         this.highscores.visible = false;
-        this.highscorebg.visible = false;
+        this.highscoresbg.visible = false;
 
     }, this);
     startButton.inputEnabled = true;
@@ -230,20 +228,24 @@ function startMenu() {
 }
 
 /*
-        ============= Window Resize ==============  
+        ============= Update ==============  
 */
+function update() {
+    if (running) {
+        playerListener();
+        checkScreenSize();
 
-function resizeGame() {
+        // Scorelabel proper updating 
+        this.scoreLabel.text = score;
+        this.scoreLabel.x = game.world.centerX - this.scoreLabel.width / 2;
 
-    game.scale.setExactFit();
-    game.scale.refresh();
+        // If the player and coconut collide, call hitCoconut
+        game.physics.arcade.collide(player, coconut, hitCoconut, null, this);
+        game.physics.arcade.overlap(player, coconut, hitCoconut, null, this);
 
+
+    }
 }
-
-$(document).resize(function () {
-    checkScreenSize();
-    resizeGame();
-});
 
 /*
         ============= Listeners ==============  
@@ -281,42 +283,21 @@ function playerListener() {
     }
 }
 
-function checkScreenSize() {
-    var ww = window.innerWidth;
-    var wh = window.innerHeight;
-
-    if (ww / wh >= 4 / 3) {
-        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    } else {
-        game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
-    }
-}
-
-/*
-        ============= Update ==============  
-*/
-function update() {
-    if (running) {
-        playerListener();
-        checkScreenSize();
-
-        // Scorelabel proper updating 
-        this.scoreLabel.text = score;
-        this.scoreLabel.x = game.world.centerX - this.scoreLabel.width / 2;
-
-        // If the player and coconut collide, call hitCoconut
-        game.physics.arcade.collide(player, coconut, hitCoconut, null, this);
-        game.physics.arcade.overlap(player, coconut, hitCoconut, null, this);
-
-
-    }
-}
-
 /*
         ============= Collision ==============  
 */
 function hitCoconut(body1, body2) {
     running = false;
+
+    recordHighscore();
+    gameOver();
+
+}
+
+/*
+        ============= Record High Score ==============  
+*/
+function recordHighscore() {
 
     highscoresArray.sort(function (a, b) {
         return a - b
@@ -335,6 +316,12 @@ function hitCoconut(body1, body2) {
     } catch (e) {
         alert("Error saving highscore.\n" + e.message);
     }
+}
+/*
+        ============= Game Over Screen ==============  
+*/
+
+function gameOver() {
 
     // Define then add the overlay
     var graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
@@ -366,10 +353,45 @@ function hitCoconut(body1, body2) {
 
     // Play again button
     var playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY, 'playagain', resetGame, this);
-
 }
+
 /*
         ============= Reset ==============  
+*/
+
+function resetGame() {
+    location.reload();
+}
+
+/*
+        ============= Window Resize ==============  
+*/
+
+function resizeGame() {
+
+    game.scale.setExactFit();
+    game.scale.refresh();
+
+}
+
+$(document).resize(function () {
+    checkScreenSize();
+    resizeGame();
+});
+
+function checkScreenSize() {
+    var ww = window.innerWidth;
+    var wh = window.innerHeight;
+
+    if (ww / wh >= 4 / 3) {
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    } else {
+        game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+    }
+}
+
+/*
+        ============= Misc Functions ==============  
 */
 
 function arrayTrim(array, trimTo) {
@@ -381,8 +403,4 @@ function arrayTrim(array, trimTo) {
         trimmedArray.push(array[current]);
     }
     return trimmedArray;
-}
-
-function resetGame() {
-    location.reload();
 }
