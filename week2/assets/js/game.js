@@ -24,6 +24,13 @@ var scoreTimer;
 var highscoresArray = [];
 var highscoreText = "";
 
+var titlesong;
+var gamesong;
+
+var buttonsound;
+var coconutsound;
+var gameoversound;
+
 //localStorage.clear();
 
 if (localStorage.getItem('highscores') == null) {
@@ -46,6 +53,13 @@ function preload() {
     game.load.image('startbutton', 'assets/img/start.png');
     game.load.image('highscorebutton', 'assets/img/highscore.png');
     game.load.image('highscorebg', 'assets/img/highscorebg.png');
+    game.load.image('mutebutton', 'assets/img/mute.png');
+    game.load.image('soundonbutton', 'assets/img/soundon.png');
+    game.load.audio('coconutsound', 'assets/sound/coconutbounce.mp3');
+    game.load.audio('titlesong', 'assets/sound/titlesong.mp3');
+    game.load.audio('gamesong', 'assets/sound/gamesong.mp3');
+    game.load.audio('buttonsound', 'assets/sound/buttonsound.mp3');
+    game.load.audio('gameoversound', 'assets/sound/gameover.mp3');
 }
 
 function create() {
@@ -99,10 +113,11 @@ function create() {
     // Adding the player sprite
     player = game.add.sprite(game.world.centerX, game.world.height - 100, 'player');
     // Setting it's anchor to the center
-    player.anchor.set(0.5);
+    player.anchor.setTo(0.5);
+
 
     // Adding the coconut sprite
-    coconut = game.add.sprite(game.world.centerX, 50, 'coconut');
+    coconut = game.add.sprite(game.world.centerX, 150, 'coconut');
     // Setting it's anchor to the center
     coconut.anchor.setTo(0.5);
 
@@ -125,7 +140,7 @@ function create() {
     }, this);
 
     /*
-    
+
         ============= Physics ==============
         
     */
@@ -147,12 +162,17 @@ function create() {
     game.physics.enable(coconut, Phaser.Physics.ARCADE);
     coconut.enableBody = true;
     coconut.body.collideWorldBounds = true;
-    coconut.body.bounce.setTo(1.3, 1.3);
+    coconut.body.bounce.setTo(2, 2);
     coconut.body.width = 80;
     coconut.body.height = 80;
     coconut.body.offsetLeft = 10;
     coconut.body.offsetRight = 10;
     coconut.body.drag = 0;
+
+    // Sound init
+    buttonsound = game.add.audio('buttonsound');
+    coconutsound = game.add.audio('coconutsound');
+    gameoversound = game.add.audio('gameoversound');
 
     // Initiate start menu
     startMenu();
@@ -186,6 +206,8 @@ function startMenu() {
 
     // Create Start Dodging button that goes over screen
     this.startButton = game.add.button(game.world.centerX - 125, game.world.centerY - 50, 'startbutton', function () {
+        // Play sound
+        buttonsound.play();
         // Set running to true
         running = true;
         // Set all overlay sprites invisible
@@ -195,6 +217,10 @@ function startMenu() {
         this.highscoreButton.visible = false;
         this.highscores.visible = false;
         this.highscoresbg.visible = false;
+        this.mutebutton.visible = false;
+        titlesong.stop();
+        gamesong = game.add.audio('gamesong');
+        gamesong.play("", 0, 0.5, true, true);
 
     }, this);
     startButton.inputEnabled = true;
@@ -213,11 +239,13 @@ function startMenu() {
         fill: "#FFF",
         align: "center"
     };
-    this.highscores = game.add.text(game.world.centerX - 20, game.world.centerY + 150, highscoreText, style);
+    this.highscores = game.add.text(game.world.centerX - 25, game.world.centerY + 150, highscoreText, style);
     this.highscores.visible = false;
 
     // Create button that goes over screen
     this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 85, 'highscorebutton', function () {
+        // Play sound
+        buttonsound.play();
         if (!this.highscores.visible) {
             this.highscores.visible = true;
             this.highscoresbg.visible = true;
@@ -228,6 +256,23 @@ function startMenu() {
     }, this);
     this.highscoreButton.inputEnabled = true;
 
+    this.mutebutton = game.add.button(game.world.width - 60, 10, 'soundonbutton', function () {
+        // Play sound
+        buttonsound.play();
+        if (!titlesong.mute) {
+            titlesong.mute = true;
+            this.mutebutton.loadTexture('mutebutton');
+        } else {
+            titlesong.mute = false;
+            this.mutebutton.loadTexture('soundonbutton');
+        }
+    }, this);
+    this.mutebutton.inputEnabled = true;
+
+    // Start song loop
+    titlesong = game.add.audio('titlesong');
+    titlesong.play("", 0, 0.5, true, true)
+
 }
 
 /*
@@ -237,6 +282,12 @@ function update() {
     if (running) {
         playerListener();
         checkScreenSize();
+
+        if (coconut.x == coconut.body.width / 2 || coconut.x == game.world.bounds.width - coconut.body.width / 2 || coconut.y == coconut.body.height / 2 || coconut.y == game.world.bounds.height - coconut.body.height / 2) {
+            coconutsound.play("", 0, 0.3, false, true);
+
+        }
+
 
         // Scorelabel proper updating 
         this.scoreLabel.text = score;
@@ -291,6 +342,9 @@ function playerListener() {
 */
 function hitCoconut(body1, body2) {
     running = false;
+
+    gamesong.stop();
+    gameoversound.play();
 
     recordHighscore();
     gameOver();
