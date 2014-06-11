@@ -40,14 +40,9 @@ if (localStorage.getItem('highscores') == null) {
     highscoresArray = JSON.parse(localStorage.getItem('highscores'));
 }
 
-/*
-     ============= Preload ==============
-*/
-function preload() {
+function initWindow() {
     // Some browsers have a useragent margin. Override this.
     $("body").css("margin", "0");
-
-
     /*
         ============= Scale ==============
     */
@@ -58,26 +53,58 @@ function preload() {
     game.stage.forcePortrait = true;
     window.checkScreenSize();
     window.resizeGame();
+}
 
-    // Loading all the game assets here
-    game.load.image('bg', 'assets/img/bg.png');
-    game.load.image('player', 'assets/img/player.png');
-    game.load.image('coconut', 'assets/img/coconut.png');
-    game.load.image('playagain', 'assets/img/playagain.png');
+/*
+     ============= Preload ==============
+*/
+function preload() {
+
+    // Make window size all good
+    initWindow();
+
+    /*
+        Loading all the game assets here in order of priority
+
+    */
+    //Sounds first
+    game.load.audio('titlesong', 'assets/sound/titlesong.mp3');
+    game.load.audio('buttonsound', 'assets/sound/buttonsound.mp3');
+
+    game.load.audio('gamesong', 'assets/sound/gamesong.mp3');
+    game.load.audio('coconutsound', 'assets/sound/coconutbounce.mp3');
+    game.load.audio('gameoversound', 'assets/sound/gameover.mp3');
+
+    // Images second
+
     game.load.image('startbutton', 'assets/img/start.png');
     game.load.image('highscorebutton', 'assets/img/highscore.png');
     game.load.image('highscorebg', 'assets/img/highscorebg.png');
     game.load.image('mutebutton', 'assets/img/mute.png');
     game.load.image('soundonbutton', 'assets/img/soundon.png');
-    game.load.audio('coconutsound', 'assets/sound/coconutbounce.mp3');
-    game.load.audio('titlesong', 'assets/sound/titlesong.mp3');
-    game.load.audio('gamesong', 'assets/sound/gamesong.mp3');
-    game.load.audio('buttonsound', 'assets/sound/buttonsound.mp3');
-    game.load.audio('gameoversound', 'assets/sound/gameover.mp3');
+
+    game.load.image('bg', 'assets/img/bg.png');
+    game.load.image('player', 'assets/img/player.png');
+    game.load.image('coconut', 'assets/img/coconut.png');
+    game.load.image('playagain', 'assets/img/playagain.png');
 }
 
 function create() {
     game.input.maxPointers = 1;
+
+
+    /*
+        ============= Game Sounds ==============
+    */
+    buttonsound = game.add.audio('buttonsound');
+    coconutsound = game.add.audio('coconutsound');
+    gameoversound = game.add.audio('gameoversound');
+    gamesong = game.add.audio('gamesong');
+
+    // Start song loop
+    titlesong = game.add.audio('titlesong');
+
+
 
     /*
         ============= Sprites ==============
@@ -167,15 +194,6 @@ function create() {
     coconut.body.offsetLeft = 10;
     coconut.body.offsetRight = 10;
     coconut.body.drag = 0;
-
-    // Sound init
-    buttonsound = game.add.audio('buttonsound');
-    coconutsound = game.add.audio('coconutsound');
-    gameoversound = game.add.audio('gameoversound');
-    gamesong = game.add.audio('gamesong');
-
-    // Start song loop
-    titlesong = game.add.audio('titlesong');
 
     // Initiate start menu
     startMenu();
