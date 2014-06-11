@@ -23,6 +23,7 @@ var scoreTimer;
 
 var highscoresArray = [];
 var highscoreText = "";
+var loadingLabel;
 
 var titlesong;
 var gamesong;
@@ -63,6 +64,16 @@ function preload() {
     // Make window size all good
     initWindow();
 
+    // Loading Label
+    var loadingText = "Loading...";
+    var loadingStyle = {
+        font: "5em Arial",
+        fill: "#FFF",
+        align: "left"
+    };
+    // Adding the scoreLabel to the game
+    loadingLabel = game.add.text(game.world.centerX - 100, game.world.centerY - 100, loadingText, loadingStyle);
+
     /*
         Loading all the game assets here in order of priority
 
@@ -91,20 +102,16 @@ function preload() {
 
 function create() {
     game.input.maxPointers = 1;
-
-
     /*
         ============= Game Sounds ==============
     */
+
+    // Start song loop
+    titlesong = game.add.audio('titlesong');
     buttonsound = game.add.audio('buttonsound');
     coconutsound = game.add.audio('coconutsound');
     gameoversound = game.add.audio('gameoversound');
     gamesong = game.add.audio('gamesong');
-
-    // Start song loop
-    titlesong = game.add.audio('titlesong');
-
-
 
     /*
         ============= Sprites ==============
@@ -195,6 +202,7 @@ function create() {
     coconut.body.offsetRight = 10;
     coconut.body.drag = 0;
 
+    loadingLabel.visible = false;
     // Initiate start menu
     startMenu();
 }
