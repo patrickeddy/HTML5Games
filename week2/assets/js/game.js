@@ -44,6 +44,20 @@ if (localStorage.getItem('highscores') == null) {
      ============= Preload ==============
 */
 function preload() {
+    // Some browsers have a useragent margin. Override this.
+    $("body").css("margin", "0");
+
+
+    /*
+        ============= Scale ==============
+    */
+
+    // Aligning the game correctly for all devices
+    game.scale.pageAlignVertically = true;
+    game.scale.pageAlignHorizontally = true;
+    game.stage.forcePortrait = true;
+    window.checkScreenSize();
+    window.resizeGame();
 
     // Loading all the game assets here
     game.load.image('bg', 'assets/img/bg.png');
@@ -63,21 +77,6 @@ function preload() {
 }
 
 function create() {
-    // Some browsers have a useragent margin. Override this.
-    $("body").css("margin", "0");
-
-
-    /*
-        ============= Scale ==============
-    */
-
-    // Aligning the game correctly for all devices
-    game.scale.pageAlignVertically = true;
-    game.scale.pageAlignHorizontally = true;
-    game.stage.forcePortrait = true;
-    window.checkScreenSize();
-    window.resizeGame();
-
     game.input.maxPointers = 1;
 
     /*
@@ -173,6 +172,10 @@ function create() {
     buttonsound = game.add.audio('buttonsound');
     coconutsound = game.add.audio('coconutsound');
     gameoversound = game.add.audio('gameoversound');
+    gamesong = game.add.audio('gamesong');
+
+    // Start song loop
+    titlesong = game.add.audio('titlesong');
 
     // Initiate start menu
     startMenu();
@@ -183,6 +186,17 @@ function create() {
 */
 
 function startMenu() {
+
+    var muteButtonRef;
+    if (localStorage.getItem("mute") === "true") {
+        titlesong.mute = true;
+        muteButtonRef = 'mutebutton';
+    } else {
+        titlesong.play("", 0, 0.5, true, true);
+        muteButtonRef = 'soundonbutton';
+    }
+
+
 
     // Create overlay and add to screen
     var startMenuOverlay = new Phaser.Graphics(this.game, 0, 0);
@@ -219,7 +233,7 @@ function startMenu() {
         this.highscoresbg.visible = false;
         this.mutebutton.visible = false;
         titlesong.stop();
-        gamesong = game.add.audio('gamesong');
+        // If the game is not set to muted, play
         gamesong.play("", 0, 0.5, true, true);
 
     }, this);
@@ -256,32 +270,32 @@ function startMenu() {
     }, this);
     this.highscoreButton.inputEnabled = true;
 
-    this.mutebutton = game.add.button(game.world.width - 60, 10, 'soundonbutton', function () {
+    this.mutebutton = game.add.button(game.world.width - 60, 10, muteButtonRef, function () {
         // Play sound
         buttonsound.play();
         if (!titlesong.mute) {
             titlesong.mute = true;
             this.mutebutton.loadTexture('mutebutton');
+            localStorage.setItem("mute", "true");
         } else {
             titlesong.mute = false;
+            if (!titlesong.isPlaying) {
+                titlesong.play();
+            }
             this.mutebutton.loadTexture('soundonbutton');
+            localStorage.setItem("mute", "false");
         }
     }, this);
     this.mutebutton.inputEnabled = true;
-
-    // Start song loop
-    titlesong = game.add.audio('titlesong');
-    titlesong.play("", 0, 0.5, true, true)
-
 }
 
 /*
         ============= Update ==============  
 */
 function update() {
+    checkScreenSize();
     if (running) {
         playerListener();
-        checkScreenSize();
 
         if (coconut.x == coconut.body.width / 2 || coconut.x == game.world.bounds.width - coconut.body.width / 2 || coconut.y == coconut.body.height / 2 || coconut.y == game.world.bounds.height - coconut.body.height / 2) {
             coconutsound.play("", 0, 0.3, false, true);
@@ -430,11 +444,6 @@ function resizeGame() {
     game.scale.refresh();
 
 }
-
-$(document).resize(function () {
-    checkScreenSize();
-    resizeGame();
-});
 
 function checkScreenSize() {
     var ww = window.innerWidth;
