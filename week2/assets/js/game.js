@@ -222,8 +222,6 @@ function startMenu() {
         muteButtonRef = 'soundonbutton';
     }
 
-
-
     // Create overlay and add to screen
     var startMenuOverlay = new Phaser.Graphics(this.game, 0, 0);
     startMenuOverlay.beginFill(0x000000, 1);
@@ -302,14 +300,22 @@ function startMenu() {
         if (!titlesong.mute) {
             titlesong.mute = true;
             this.mutebutton.loadTexture('mutebutton');
-            localStorage.setItem("mute", "true");
+            try {
+                localStorage.setItem("mute", "true");
+            } catch (e) {
+                alert("Couldn't save mute setting.\n" + e.message);
+            }
         } else {
             titlesong.mute = false;
             if (!titlesong.isPlaying) {
                 titlesong.play();
             }
             this.mutebutton.loadTexture('soundonbutton');
-            localStorage.setItem("mute", "false");
+            try {
+                localStorage.setItem("mute", "false");
+            } catch (e) {
+                alert("Couldn't save mute setting.\n" + e.message);
+            }
         }
     }, this);
     this.mutebutton.inputEnabled = true;
