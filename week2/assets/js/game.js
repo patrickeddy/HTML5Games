@@ -91,12 +91,28 @@ function preload() {
     game.load.audio('titlesong', 'assets/sound/titlesong.ogg');
     game.load.audio('buttonsound', 'assets/sound/buttonsound.ogg');
 
+    //Add the title song and button sounds right after they've been loaded
+    titlesong = game.add.audio('titlesong');
+    buttonsound = game.add.audio('buttonsound');
+
+    // Load game song
     game.load.audio('gamesong', 'assets/sound/gamesong.ogg');
+    // Add the game song after it's been loaded
+    gamesong = game.add.audio('gamesong');
+
     game.load.audio('coconutsound', 'assets/sound/coconutbounce.ogg');
     game.load.audio('gameoversound', 'assets/sound/gameover.ogg');
 
-    // Images second
+    // Add coconut sound and gameover sound after they've been loaded
+    coconutsound = game.add.audio('coconutsound');
+    gameoversound = game.add.audio('gameoversound');
 
+    /*
+        ============= Sounds that need to be added quickly ==============
+    */
+
+
+    // Images are faster, so they come last
     game.load.image('startbutton', 'assets/img/start.png');
     game.load.image('highscorebutton', 'assets/img/highscore.png');
     game.load.image('highscorebg', 'assets/img/highscorebg.png');
@@ -111,15 +127,8 @@ function preload() {
 
 function create() {
     game.input.maxPointers = 1;
-    /*
-        ============= Game Sounds ==============
-    */
 
-    // Start song loop
-    titlesong = game.add.audio('titlesong');
-    buttonsound = game.add.audio('buttonsound');
-
-
+    // Check the mute status in localStorage
     if (localStorage.getItem("mute") === "true") {
         titlesong.mute = true;
         muteButtonRef = 'mutebutton';
@@ -127,12 +136,6 @@ function create() {
         titlesong.play("", 0, 0.5, true, true);
         muteButtonRef = 'soundonbutton';
     }
-
-
-
-    coconutsound = game.add.audio('coconutsound');
-    gameoversound = game.add.audio('gameoversound');
-    gamesong = game.add.audio('gamesong');
 
     /*
         ============= Sprites ==============
