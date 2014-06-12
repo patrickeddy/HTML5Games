@@ -28,6 +28,7 @@ var loadingBar;
 
 var titlesong;
 var gamesong;
+var muteButtonRef;
 
 var buttonsound;
 var coconutsound;
@@ -79,7 +80,7 @@ function preload() {
     loadingBarG.beginFill(0x0ff000, 0.5);
     loadingBarG.drawRect(0, 0, 250, 10);
     loadingBarG.endFill();
-    loadingBar = this.game.add.image(game.world.centerX - 150, game.world.centerY, loadingBarG.generateTexture());
+    loadingBar = this.game.add.image(game.world.centerX - 125, game.world.centerY, loadingBarG.generateTexture());
     game.load.setPreloadSprite(loadingBar, 0);
 
     /*
@@ -117,6 +118,18 @@ function create() {
     // Start song loop
     titlesong = game.add.audio('titlesong');
     buttonsound = game.add.audio('buttonsound');
+
+
+    if (localStorage.getItem("mute") === "true") {
+        titlesong.mute = true;
+        muteButtonRef = 'mutebutton';
+    } else {
+        titlesong.play("", 0, 0.5, true, true);
+        muteButtonRef = 'soundonbutton';
+    }
+
+
+
     coconutsound = game.add.audio('coconutsound');
     gameoversound = game.add.audio('gameoversound');
     gamesong = game.add.audio('gamesong');
@@ -226,15 +239,6 @@ function create() {
 
 function startMenu() {
 
-    var muteButtonRef;
-    if (localStorage.getItem("mute") === "true") {
-        titlesong.mute = true;
-        muteButtonRef = 'mutebutton';
-    } else {
-        titlesong.play("", 0, 0.5, true, true);
-        muteButtonRef = 'soundonbutton';
-    }
-
     // Create overlay and add to screen
     var startMenuOverlay = new Phaser.Graphics(this.game, 0, 0);
     startMenuOverlay.beginFill(0x000000, 1);
@@ -271,7 +275,8 @@ function startMenu() {
         this.mutebutton.visible = false;
         titlesong.stop();
         // If the game is not set to muted, play
-        gamesong.play("", 0, 0.5, true, true);
+        if (localStorage.getItem("mute") === "false")
+            gamesong.play("", 0, 0.5, true, true);
 
     }, this);
     startButton.inputEnabled = true;
@@ -346,7 +351,6 @@ function update() {
             coconutsound.play("", 0, 0.3, false, true);
 
         }
-
 
         // Scorelabel proper updating 
         this.scoreLabel.text = score;
