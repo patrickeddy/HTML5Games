@@ -95,6 +95,17 @@ function preload() {
     titlesong = game.add.audio('titlesong');
     buttonsound = game.add.audio('buttonsound');
 
+
+    var muteStatus = localStorage.getItem("mute") === "true";
+    // Check the mute status in localStorage
+    if (muteStatus) {
+        titlesong.mute = true;
+        muteButtonRef = 'mutebutton';
+    } else if (muteStatus == null || !muteStatus) {
+        titlesong.play("", 0, 0.5, true, true);
+        muteButtonRef = 'soundonbutton';
+    }
+
     // Load game song
     game.load.audio('gamesong', 'assets/sound/gamesong.ogg');
     // Add the game song after it's been loaded
@@ -127,15 +138,6 @@ function preload() {
 
 function create() {
     game.input.maxPointers = 1;
-
-    // Check the mute status in localStorage
-    if (localStorage.getItem("mute") === "true") {
-        titlesong.mute = true;
-        muteButtonRef = 'mutebutton';
-    } else if (localStorage.getItem("mute") == null || localStorage.getItem("mute") == "false") {
-        titlesong.play("", 0, 0.5, true, true);
-        muteButtonRef = 'soundonbutton';
-    }
 
     /*
         ============= Sprites ==============
