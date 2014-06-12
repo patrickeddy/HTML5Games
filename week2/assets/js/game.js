@@ -123,7 +123,7 @@ function create() {
     if (localStorage.getItem("mute") === "true") {
         titlesong.mute = true;
         muteButtonRef = 'mutebutton';
-    } else {
+    } else if (localStorage.getItem("mute") == null || localStorage.getItem("mute") == "false") {
         titlesong.play("", 0, 0.5, true, true);
         muteButtonRef = 'soundonbutton';
     }
