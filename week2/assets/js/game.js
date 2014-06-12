@@ -24,6 +24,7 @@ var scoreTimer;
 var highscoresArray = [];
 var highscoreText = "";
 var loadingLabel;
+var loadingBar;
 
 var titlesong;
 var gamesong;
@@ -73,6 +74,13 @@ function preload() {
     };
     // Adding the scoreLabel to the game
     loadingLabel = game.add.text(game.world.centerX - 100, game.world.centerY - 100, loadingText, loadingStyle);
+
+    var loadingBarG = new Phaser.Graphics(this.game, 0, 0);
+    loadingBarG.beginFill(0x0ff000, 0.5);
+    loadingBarG.drawRect(0, 0, 250, 10);
+    loadingBarG.endFill();
+    loadingBar = this.game.add.image(game.world.centerX - 150, game.world.centerY, loadingBarG.generateTexture());
+    game.load.setPreloadSprite(loadingBar, 0);
 
     /*
         Loading all the game assets here in order of priority
@@ -203,6 +211,7 @@ function create() {
     coconut.body.drag = 0;
 
     loadingLabel.visible = false;
+    loadingBar.visible = false;
     // Initiate start menu
     startMenu();
 }
