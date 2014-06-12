@@ -88,12 +88,12 @@ function preload() {
 
     */
     //Sounds first
-    game.load.audio('titlesong', 'assets/sound/titlesong.mp3');
-    game.load.audio('buttonsound', 'assets/sound/buttonsound.mp3');
+    game.load.audio('titlesong', 'assets/sound/titlesong.ogg');
+    game.load.audio('buttonsound', 'assets/sound/buttonsound.ogg');
 
-    game.load.audio('gamesong', 'assets/sound/gamesong.mp3');
-    game.load.audio('coconutsound', 'assets/sound/coconutbounce.mp3');
-    game.load.audio('gameoversound', 'assets/sound/gameover.mp3');
+    game.load.audio('gamesong', 'assets/sound/gamesong.ogg');
+    game.load.audio('coconutsound', 'assets/sound/coconutbounce.ogg');
+    game.load.audio('gameoversound', 'assets/sound/gameover.ogg');
 
     // Images second
 
