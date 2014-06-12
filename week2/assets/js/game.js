@@ -170,14 +170,18 @@ function create() {
     player.inputEnabled = true;
 
     // Boolean of isPressed is set depending on the state of the onInputDown event
+    var touchDisabled = false;
     player.events.onInputDown.add(function () {
-        isPressed = true;
+        if (!touchDisabled)
+            isPressed = true;
     }, this);
     player.events.onInputUp.add(function () {
-        isPressed = false;
+        if (!touchDisabled)
+            isPressed = false;
     }, this);
     player.events.onInputOver.add(function () {
         isPressed = true;
+        touchDisabled = true;
     }, this);
 
     /*
