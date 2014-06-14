@@ -384,10 +384,9 @@ function playerListener() {
         }
         if (score >= 5) {
             game.physics.arcade.accelerateToObject(coconut, player, 600);
-        } else {
+        } else if (score <= 1) {
             game.physics.arcade.accelerateToXY(coconut, randPosObject.x, randPosObject.y, 600);
         }
-
     }
 }
 
