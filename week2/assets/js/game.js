@@ -18,6 +18,8 @@ var player;
 var coconut;
 var bg;
 
+var randPosObject;
+
 var score = 0;
 var scoreTimer;
 
@@ -26,13 +28,15 @@ var highscoreText = "";
 var loadingLabel;
 var loadingBar;
 
+// All of the games audio in one file
+var gameaudio;
+// Songs
 var titlesong;
 var gamesong;
+// bool value to see if game is muted
+var gameMuted;
+// Reference to the muteButton
 var muteButtonRef;
-
-var buttonsound;
-var coconutsound;
-var gameoversound;
 
 //localStorage.clear();
 
@@ -85,42 +89,33 @@ function preload() {
 
     /*
         Loading all the game assets here in order of priority
-
-    */
-    //Sounds first
-    game.load.audio('titlesong', 'assets/sound/titlesong.ogg');
-    game.load.audio('buttonsound', 'assets/sound/buttonsound.ogg');
-
-    //Add the title song and button sounds right after they've been loaded
-    titlesong = game.add.audio('titlesong');
-    buttonsound = game.add.audio('buttonsound');
-
-
-    var muteStatus = localStorage.getItem("mute") === "true";
-    // Check the mute status in localStorage
-    if (muteStatus) {
-        titlesong.mute = true;
-        muteButtonRef = 'mutebutton';
-    } else if (muteStatus == null || !muteStatus) {
-        titlesong.play("", 0, 0.5, true, true);
-        muteButtonRef = 'soundonbutton';
-    }
-
-    // Load game song
-    game.load.audio('gamesong', 'assets/sound/gamesong.ogg');
-    // Add the game song after it's been loaded
-    gamesong = game.add.audio('gamesong');
-
-    game.load.audio('coconutsound', 'assets/sound/coconutbounce.ogg');
-    game.load.audio('gameoversound', 'assets/sound/gameover.ogg');
-
-    // Add coconut sound and gameover sound after they've been loaded
-    coconutsound = game.add.audio('coconutsound');
-    gameoversound = game.add.audio('gameoversound');
-
-    /*
+        
         ============= Sounds that need to be added quickly ==============
     */
+    titlesong = game.load.audio('titlesong', 'assets/sound/titlesong.ogg');
+    titlesong = game.add.audio('titlesong');
+
+    gameMuted = localStorage.getItem("mute") === "true";
+    // Check the mute status in localStorage
+    if (gameMuted) {
+        muteButtonRef = 'mutebutton';
+    } else if (gameMuted == null || !gameMuted) {
+        titlesong.play('', 0, 0.5, true, true);
+        muteButtonRef = 'soundonbutton';
+    }
+    /*
+        ====== MISC GAME SOUNDS IN 1 FILE ========
+    */
+
+    game.load.audio('gameaudio', 'assets/sound/spritesounds.ogg');
+    gameaudio = game.add.audio('gameaudio');
+    gameaudio.addMarker('buttonsound', 0, 1);
+    gameaudio.addMarker('coconutsound', 2, 1);
+    gameaudio.addMarker('gameoversound', 4, 3);
+
+    // Finally the game song
+    game.load.audio('gamesong', 'assets/sound/gamesong.ogg');
+    gamesong = game.add.audio('gamesong');
 
 
     // Images are faster, so they come last
@@ -267,7 +262,9 @@ function startMenu() {
     // Create Start Dodging button that goes over screen
     this.startButton = game.add.button(game.world.centerX - 125, game.world.centerY - 50, 'startbutton', function () {
         // Play sound
-        buttonsound.play();
+        gameaudio.play('buttonsound');
+        // Stop title music
+        titlesong.stop();
         // Set running to true
         running = true;
         // Set all overlay sprites invisible
@@ -278,10 +275,13 @@ function startMenu() {
         this.highscores.visible = false;
         this.highscoresbg.visible = false;
         this.mutebutton.visible = false;
-        titlesong.stop();
+
+        // Accelerate Coconut to arbitrary point so the player can't cheat
+        coconutAntiCheat();
+
         // If the game is not set to muted, play
-        if (localStorage.getItem("mute") === "false")
-            gamesong.play("", 0, 0.5, true, true);
+        if (!gameMuted)
+            gamesong.play('', 0, 0.5, true, true);
 
     }, this);
     startButton.inputEnabled = true;
@@ -306,7 +306,7 @@ function startMenu() {
     // Create button that goes over screen
     this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 85, 'highscorebutton', function () {
         // Play sound
-        buttonsound.play();
+        gameaudio.play('buttonsound');
         if (!this.highscores.visible) {
             this.highscores.visible = true;
             this.highscoresbg.visible = true;
@@ -319,27 +319,8 @@ function startMenu() {
 
     this.mutebutton = game.add.button(game.world.width - 60, 10, muteButtonRef, function () {
         // Play sound
-        buttonsound.play();
-        if (!titlesong.mute) {
-            titlesong.mute = true;
-            this.mutebutton.loadTexture('mutebutton');
-            try {
-                localStorage.setItem("mute", "true");
-            } catch (e) {
-                alert("Couldn't save mute setting.\n" + e.message);
-            }
-        } else {
-            titlesong.mute = false;
-            if (!titlesong.isPlaying) {
-                titlesong.play();
-            }
-            this.mutebutton.loadTexture('soundonbutton');
-            try {
-                localStorage.setItem("mute", "false");
-            } catch (e) {
-                alert("Couldn't save mute setting.\n" + e.message);
-            }
-        }
+        gameaudio.play('buttonsound');
+        toggleGameMute(this.mutebutton);
     }, this);
     this.mutebutton.inputEnabled = true;
 }
@@ -353,7 +334,7 @@ function update() {
         playerListener();
 
         if (coconut.x == coconut.body.width / 2 || coconut.x == game.world.bounds.width - coconut.body.width / 2 || coconut.y == coconut.body.height / 2 || coconut.y == game.world.bounds.height - coconut.body.height / 2) {
-            coconutsound.play("", 0, 0.3, false, true);
+            gameaudio.play('coconutsound', 0, 0.3, false, true);
 
         }
 
@@ -401,7 +382,12 @@ function playerListener() {
         if (!scoreTimer.running) {
             scoreTimer.start();
         }
-        game.physics.arcade.accelerateToObject(coconut, player, 600);
+        if (score >= 5) {
+            game.physics.arcade.accelerateToObject(coconut, player, 600);
+        } else {
+            game.physics.arcade.accelerateToXY(coconut, randPosObject.x, randPosObject.y, 600);
+        }
+
     }
 }
 
@@ -412,7 +398,7 @@ function hitCoconut(body1, body2) {
     running = false;
 
     gamesong.stop();
-    gameoversound.play();
+    gameaudio.play('gameoversound');
 
     recordHighscore();
     gameOver();
@@ -486,6 +472,37 @@ function gameOver() {
 
 function resetGame() {
     location.reload();
+}
+
+function coconutAntiCheat() {
+    function randomPos() {
+        this.x = Math.abs(Math.floor(Math.random() * game.world.width));
+        this.y = Math.abs(Math.floor(Math.random() * game.world.height));
+    }
+    randPosObject = new randomPos();
+}
+
+function toggleGameMute(mutebutton) {
+    if (!gameMuted) {
+        gameMuted = true;
+        titlesong.stop();
+        mutebutton.loadTexture('mutebutton');
+        try {
+            localStorage.setItem("mute", "true");
+        } catch (e) {
+            alert("Couldn't save mute setting.\n" + e.message);
+        }
+    } else {
+        gameMuted = false;
+        if (!titlesong.isPlaying)
+            titlesong.play();
+        mutebutton.loadTexture('soundonbutton');
+        try {
+            localStorage.setItem("mute", "false");
+        } catch (e) {
+            alert("Couldn't save mute setting.\n" + e.message);
+        }
+    }
 }
 
 /*
