@@ -335,6 +335,10 @@ function update() {
     if (running) {
         playerListener();
 
+        if (score % 10 == 0) {
+            coconut.body.angularAcceleration = 0;
+        }
+
         if (coconut.x == coconut.body.width / 2 || coconut.x == game.world.bounds.width - coconut.body.width / 2 || coconut.y == coconut.body.height / 2 || coconut.y == game.world.bounds.height - coconut.body.height / 2) {
             gameaudio.play('coconutsound', 0, 0.3, false, true);
 
