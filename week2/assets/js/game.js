@@ -226,6 +226,8 @@ function create() {
     coconut.body.offsetLeft = 10;
     coconut.body.offsetRight = 10;
     coconut.body.drag = 0;
+    coconut.body.maxAngular = 500;
+    coconut.body.angularDrag = 50;
 
     loadingLabel.visible = false;
     loadingBar.visible = false;
@@ -337,6 +339,12 @@ function update() {
             gameaudio.play('coconutsound', 0, 0.3, false, true);
 
         }
+        if (coconut.x == coconut.body.width / 2) {
+            coconut.body.angularAcceleration += 200;
+        }
+        if (coconut.x == game.world.bounds.width - coconut.body.width / 2) {
+            coconut.body.angularAcceleration -= 200;
+        }
 
         // Scorelabel proper updating 
         this.scoreLabel.text = score;
@@ -345,8 +353,6 @@ function update() {
         // If the player and coconut collide, call hitCoconut
         game.physics.arcade.collide(player, coconut, hitCoconut, null, this);
         game.physics.arcade.overlap(player, coconut, hitCoconut, null, this);
-
-
     }
 }
 
