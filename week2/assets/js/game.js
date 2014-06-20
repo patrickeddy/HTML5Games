@@ -10,23 +10,24 @@ var game = new Phaser.Game(SAFE_ZONE_WIDTH, SAFE_ZONE_HEIGHT, Phaser.AUTO, '', {
 /*
     ============= Variables ==============
 */
-
+// Game boolean variables
 var running = false;
 var isPressed = false;
-
+// Main game sprites
 var player;
 var coconut;
 var bg;
-
+// For the coconut
 var randPosObject;
-
+// Game score
 var score = 0;
 var scoreTimer;
-
+//Highscore
 var highscoresArray = [];
-var highscoreText = "";
+// Loading bar
 var loadingLabel;
 var loadingBar;
+var gameOverScreen;
 
 // All of the games audio in one file
 var gameaudio;
@@ -294,6 +295,7 @@ function startMenu() {
     highscoresArray.sort(function (a, b) {
         return b - a
     });
+    var highscoreText = "";
     for (var current = 0; current < highscoresArray.length; current++) {
         highscoreText += highscoresArray[current] + "\n";
     }
@@ -318,10 +320,9 @@ function startMenu() {
         }
     }, this);
     this.highscoreButton.inputEnabled = true;
-
     this.mutebutton = game.add.button(game.world.width - 60, 10, muteButtonRef, function () {
         // Play sound
-        gameaudio.play('buttonsound');
+        titlesong.play('buttonsound');
         toggleGameMute(this.mutebutton);
     }, this);
     this.mutebutton.inputEnabled = true;
@@ -410,7 +411,7 @@ function hitCoconut(body1, body2) {
     gameaudio.play('gameoversound');
 
     recordHighscore();
-    gameOver();
+    gameOverScreen = new gameOver();
 
 }
 
@@ -449,7 +450,7 @@ function gameOver() {
     graphicOverlay.drawRect(0, 0, game.world.width, game.world.height);
     graphicOverlay.endFill();
 
-    this.overlay = this.game.add.image(-10, -10, graphicOverlay.generateTexture());
+    this.overlay = game.add.image(-10, -10, graphicOverlay.generateTexture());
 
     // Add the lose text
     var text = "Oh snap!";
@@ -459,7 +460,7 @@ function gameOver() {
         align: "center"
     };
 
-    var t = game.add.text(game.world.centerX - 200, game.world.centerY - 250, text, style);
+    this.t = game.add.text(game.world.centerX - 200, game.world.centerY - 250, text, style);
 
     text = "Score: " + score + "s";
     style = {
@@ -469,17 +470,80 @@ function gameOver() {
     };
 
     // Add the final score
-    game.add.text(game.world.centerX - 100, game.world.centerY - 100, text, style);
+    this.finalScore = game.add.text(game.world.centerX - 100, game.world.centerY - 100, text, style);
 
     // Play again button
-    var playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY, 'playagain', resetGame, this);
+    this.playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY, 'playagain', function () {
+        this.highscores.visible = false;
+        this.highscoresbg.visible = false;
+        this.highscoreButton.visible = false;
+        resetGame();
+    }, this);
+
+    this.highscoresbg = game.add.image(game.world.centerX - 128, game.world.centerY + 105, 'highscorebg');
+    this.highscoresbg.visible = false;
+
+    highscoresArray.sort(function (a, b) {
+        return b - a
+    });
+    var highscoreText = "";
+    for (var current = 0; current < highscoresArray.length; current++) {
+        highscoreText += highscoresArray[current] + "\n";
+    }
+    var style = {
+        font: "4em Arial",
+        fill: "#FFF",
+        align: "center"
+    };
+    this.highscores = game.add.text(game.world.centerX - 25, game.world.centerY + 175, highscoreText, style);
+    this.highscores.visible = false;
+
+    // Create button that goes over screen
+    this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 110, 'highscorebutton', function () {
+        // Play sound
+        gameaudio.play('buttonsound');
+        if (!this.highscores.visible) {
+            this.highscores.visible = true;
+            this.highscoresbg.visible = true;
+        } else {
+            this.highscores.visible = false;
+            this.highscoresbg.visible = false;
+        }
+    }, this);
+    this.highscoreButton.inputEnabled = true;
 }
 
 /*
         ============= Reset ==============  
 */
-
 function resetGame() {
+    gameaudio.play('buttonsound');
+    score = 0;
+    gameOverScreen.overlay.visible = false;
+    gameOverScreen.t.visible = false;
+    gameOverScreen.finalScore.visible = false;
+    gameOverScreen.playAgainButton.visible = false;
+    helpText.visible = true;
+
+    player.x = game.world.centerX;
+    player.y = game.world.height - player.height;
+
+    coconut.x = game.world.centerX;
+    coconut.y = 150;
+    coconut.body.velocity.x = 0;
+    coconut.body.velocity.y = 0;
+    coconutAntiCheat();
+
+    isPressed = false;
+    running = true;
+
+    if (!gameMuted)
+        gamesong.play('', 0, 0.5, true, true);
+    running = true;
+}
+
+
+function backToStart() {
     location.reload();
 }
 
@@ -541,6 +605,8 @@ function checkScreenSize() {
 */
 
 function arrayTrim(array, trimTo) {
+    if (array.length == trimTo)
+        return -1;
     array.sort(function (a, b) {
         return b - a;
     });
