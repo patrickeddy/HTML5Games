@@ -527,11 +527,18 @@ function resetGame() {
 
     player.x = game.world.centerX;
     player.y = game.world.height - player.height;
+    player.body.velocity.x = 0;
+    player.body.velocity.y = 0;
+    player.body.acceleration.x = 0;
+    player.body.acceleration.y = 0;
 
     coconut.x = game.world.centerX;
     coconut.y = 150;
     coconut.body.velocity.x = 0;
     coconut.body.velocity.y = 0;
+    coconut.body.acceleration.x = 0;
+    coconut.body.acceleration.y = 0;
+    coconut.body.angularVelocity = 0;
     coconutAntiCheat();
 
     isPressed = false;
