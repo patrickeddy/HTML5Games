@@ -125,6 +125,7 @@ function preload() {
     game.load.image('highscorebg', 'assets/img/highscorebg.png');
     game.load.image('mutebutton', 'assets/img/mute.png');
     game.load.image('soundonbutton', 'assets/img/soundon.png');
+    game.load.image('mainmenubutton', 'assets/img/mainmenu.png');
 
     game.load.image('bg', 'assets/img/bg.png');
     game.load.image('player', 'assets/img/player.png');
@@ -392,6 +393,8 @@ function playerListener() {
         }
         if (!scoreTimer.running) {
             scoreTimer.start();
+        } else if (scoreTimer.paused) {
+            scoreTimer.resume();
         }
         if (score >= 5) {
             game.physics.arcade.accelerateToObject(coconut, player, 600);
@@ -426,9 +429,9 @@ function recordHighscore() {
     if (highscoresArray.length >= 3 && score != 0) {
         highscoresArray.push(score);
         highscoresArray = arrayTrim(highscoresArray, 3);
-    } else if (highscoresArray[0] == 0) {
+    } else if (highscoresArray[0] == 0 && score != 0) {
         highscoresArray[0] = score;
-    } else {
+    } else if (score != 0) {
         highscoresArray.push(score);
     }
     try {
@@ -466,6 +469,7 @@ function gameOver() {
         this.highscores.visible = false;
         this.highscoresbg.visible = false;
         this.highscoreButton.visible = false;
+        this.mainmenuButton.visible = false;
         resetGame();
     }, this);
 
@@ -483,6 +487,8 @@ function gameOver() {
     // Add the lose text
     var message;
     var style;
+
+    // Adding the message based on whether the user got a new highscore
     if (highscoresArray[0] == 0 || score > highscoresArray[highscoresArray.length - 1]) {
         message = "New highscore!";
         style = {
@@ -515,9 +521,6 @@ function gameOver() {
     this.highscores = game.add.text(game.world.centerX - 25, game.world.centerY + 175, highscoreText, style);
     this.highscores.visible = false;
 
-    // Adding the message based on whether the user got a new highscore
-
-
     // Create button that goes over screen
     this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 110, 'highscorebutton', function () {
         // Play sound
@@ -532,6 +535,12 @@ function gameOver() {
     }, this);
     this.highscoreButton.inputEnabled = true;
 
+    // Go back to main menu by refreshing
+    this.mainmenuButton = game.add.button(10, 10, 'mainmenubutton', function () {
+        location.reload();
+    }, this);
+    this.mainmenuButton.inputEnabled = true;
+
 }
 
 /*
@@ -540,6 +549,7 @@ function gameOver() {
 function resetGame() {
     gameaudio.play('buttonsound');
     score = 0;
+    scoreTimer.pause();
     gameOverScreen.overlay.visible = false;
     gameOverScreen.t.visible = false;
     gameOverScreen.finalScore.visible = false;
