@@ -423,14 +423,13 @@ function recordHighscore() {
     highscoresArray.sort(function (a, b) {
         return a - b
     });
-    if (highscoresArray.length >= 3) {
+    if (highscoresArray.length >= 3 && score != 0) {
         highscoresArray.push(score);
         highscoresArray = arrayTrim(highscoresArray, 3);
+    } else if (highscoresArray[0] == 0) {
+        highscoresArray[0] = score;
     } else {
         highscoresArray.push(score);
-    }
-    if (highscoresArray[0] == 0 || score > highscoresArray[0]) {
-        highscoresArray[0] = score;
     }
     try {
         localStorage.setItem('highscores', JSON.stringify(highscoresArray));
@@ -482,9 +481,9 @@ function gameOver() {
     }
 
     // Add the lose text
-    var message = "Oh snap!";
+    var message;
     var style;
-    if (highscoresArray.length == 0 || score > highscoresArray[highscoresArray.length - 1]) {
+    if (highscoresArray[0] == 0 || score > highscoresArray[highscoresArray.length - 1]) {
         message = "New highscore!";
         style = {
             font: "8em Arial",
