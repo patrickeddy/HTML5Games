@@ -452,17 +452,7 @@ function gameOver() {
 
     this.overlay = game.add.image(-10, -10, graphicOverlay.generateTexture());
 
-    // Add the lose text
-    var text = "Oh snap!";
-    var style = {
-        font: "10em Arial",
-        fill: "#F00",
-        align: "center"
-    };
-
-    this.t = game.add.text(game.world.centerX - 200, game.world.centerY - 250, text, style);
-
-    text = "Score: " + score + "s";
+    var scoreText = "Score: " + score + "s";
     style = {
         font: "5em Arial",
         fill: "#FFF",
@@ -470,7 +460,7 @@ function gameOver() {
     };
 
     // Add the final score
-    this.finalScore = game.add.text(game.world.centerX - 100, game.world.centerY - 100, text, style);
+    this.finalScore = game.add.text(game.world.centerX - 100, game.world.centerY - 100, scoreText, style);
 
     // Play again button
     this.playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY, 'playagain', function () {
@@ -490,6 +480,34 @@ function gameOver() {
     for (var current = 0; current < highscoresArray.length; current++) {
         highscoreText += highscoresArray[current] + "\n";
     }
+
+    // Add the lose text
+    var message = "Oh snap!";
+    var style;
+    if (highscoresArray.length == 0 || score > highscoresArray[highscoresArray.length - 1]) {
+        message = "New highscore!";
+        style = {
+            font: "8em Arial",
+            fill: "#0F0",
+            align: "center"
+        };
+
+
+        // Add the text to the screen
+        this.t = game.add.text(game.world.centerX - 270, game.world.centerY - 220, message, style);
+    } else {
+        message = "Oh snap!";
+        style = {
+            font: "10em Arial",
+            fill: "#F00",
+            align: "center"
+        };
+
+
+        // Add the text to the screen
+        this.t = game.add.text(game.world.centerX - 200, game.world.centerY - 250, message, style);
+    }
+
     var style = {
         font: "4em Arial",
         fill: "#FFF",
@@ -497,6 +515,9 @@ function gameOver() {
     };
     this.highscores = game.add.text(game.world.centerX - 25, game.world.centerY + 175, highscoreText, style);
     this.highscores.visible = false;
+
+    // Adding the message based on whether the user got a new highscore
+
 
     // Create button that goes over screen
     this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 110, 'highscorebutton', function () {
@@ -511,6 +532,7 @@ function gameOver() {
         }
     }, this);
     this.highscoreButton.inputEnabled = true;
+
 }
 
 /*
@@ -542,7 +564,6 @@ function resetGame() {
     coconutAntiCheat();
 
     isPressed = false;
-    running = true;
 
     if (!gameMuted)
         gamesong.play('', 0, 0.5, true, true);
