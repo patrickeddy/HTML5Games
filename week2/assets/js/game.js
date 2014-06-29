@@ -489,7 +489,7 @@ function gameOver() {
     var style;
 
     // Adding the message based on whether the user got a new highscore
-    if (highscoresArray[0] == 0 || score > highscoresArray[highscoresArray.length - 1]) {
+    if (score == highscoresArray[0]) {
         message = "New highscore!";
         style = {
             font: "8em Arial",
