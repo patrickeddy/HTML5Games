@@ -1,0 +1,41 @@
+html,
+body {
+    margin: 0;
+}
+body {
+    font-family: Helvetica, arial, serif;
+    text-align: center;
+}
+h1 {
+    font-weight: 100;
+}
+a.main-header {
+    margin-top: 2em;
+    font-size: 1.5em;
+    color: #00B;
+}
+a.main-header:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+#games {
+    display: list-item;
+}
+.game-entry {
+    margin: 2em;
+}
+a.game-link {
+    cursor: pointer;
+    transition: opacity .5s ease-in;
+    -moz-transition: opacity .5s ease-in;
+    -webkit-transition: opacity .25s ease-in;
+}
+a.game-link:hover {
+    color: #00B;
+    opacity: 0.5;
+}
+img.square {
+    padding: .3em;
+    width: 8em;
+    height: 8em;
+}
