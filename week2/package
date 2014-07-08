@@ -1,0 +1,2 @@
+sudo rm DodgeCoconut.zip
+sudo zip -r -X DodgeCoconut.zip assets index.html

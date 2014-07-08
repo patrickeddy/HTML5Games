@@ -1,0 +1,2 @@
+sudo rm KittyClicker.zip 
+sudo zip -r -X KittyClicker.zip assets index.html
