@@ -6,6 +6,8 @@ body {
     height: 100%;
 }
 #ad {
+    position: absolute;
+    z-index: 1000;
     width: 100%;
 }
 #game-div {}
