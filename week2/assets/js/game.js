@@ -268,7 +268,7 @@ function startMenu() {
 
     // Create Start Dodging button that goes over screen
     this.startButton = game.add.button(game.world.centerX - 125, game.world.centerY - 50, 'startbutton', function () {
-        $("#ad").css("display", "none");
+        $(".adsbygoogle").css("display", "none");
         // Play sound
         gameaudio.play('buttonsound');
         // Stop title music
@@ -451,7 +451,7 @@ function recordHighscore() {
 function gameOver() {
 
     // Toggle the ad on again
-    $("#ad").css("display", "inline-block");
+    $(".adsbygoogle").css("display", "inline-block");
 
     // Define then add the overlay
     var graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
