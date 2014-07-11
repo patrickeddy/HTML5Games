@@ -268,6 +268,7 @@ function startMenu() {
 
     // Create Start Dodging button that goes over screen
     this.startButton = game.add.button(game.world.centerX - 125, game.world.centerY - 50, 'startbutton', function () {
+        // Hide the ad
         $("#ad").css("display", "none");
         // Play sound
         gameaudio.play('buttonsound');
@@ -584,6 +585,7 @@ function resetGame() {
     if (!gameMuted)
         gamesong.play('', 0, 0.5, true, true);
     running = true;
+    $("#ad").css("display", "none");
 }
 
 
