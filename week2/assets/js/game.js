@@ -452,7 +452,7 @@ function recordHighscore() {
 function gameOver() {
 
     // Toggle the ad on again
-    $("#ad").css("display", "inline-block");
+    showAd();
 
     // Define then add the overlay
     var graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
@@ -585,7 +585,7 @@ function resetGame() {
     if (!gameMuted)
         gamesong.play('', 0, 0.5, true, true);
     running = true;
-    $("#ad").css("display", "none");
+    hideAd();
 }
 
 
@@ -649,6 +649,14 @@ function checkScreenSize() {
 /*
         ============= Misc Functions ==============  
 */
+
+function hideAd() {
+    $("#ad").css("display", "none");
+}
+
+function showAd() {
+    $("#ad").css("display", "inline-block");
+}
 
 function arrayTrim(array, trimTo) {
     if (array.length == trimTo)
