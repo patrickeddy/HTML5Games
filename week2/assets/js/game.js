@@ -70,6 +70,7 @@ function preload() {
 
     // Make window size all good
     initWindow();
+    hideAd();
 
     // Loading Label
     var loadingText = "Loading...";
@@ -223,7 +224,8 @@ function create() {
     game.physics.enable(coconut, Phaser.Physics.ARCADE);
     coconut.enableBody = true;
     coconut.body.collideWorldBounds = true;
-    coconut.body.bounce.setTo(2, 2);
+    coconut.body.bounce.x = 1000;
+    coconut.body.bounce.y = 1000;
     coconut.body.width = 80;
     coconut.body.height = 80;
     coconut.body.offsetLeft = 10;
@@ -231,6 +233,8 @@ function create() {
     coconut.body.drag = 0;
     coconut.body.maxAngular = 500;
     coconut.body.angularDrag = 50;
+    coconut.body.maxVelocity.x = 100000000000000;
+    coconut.body.maxVelocity.y = 100000000000000;
 
     loadingLabel.visible = false;
     loadingBar.visible = false;
@@ -269,8 +273,6 @@ function startMenu() {
 
     // Create Start Dodging button that goes over screen
     this.startButton = game.add.button(game.world.centerX - 150, game.world.centerY - 75, 'startbutton', function () {
-        // Hide the ad
-        $("#ad").css("display", "none");
         // Play sound
         gameaudio.play('buttonsound');
         // Stop title music
@@ -349,6 +351,7 @@ function update() {
         }
 
         if (coconut.x == coconut.body.width / 2 || coconut.x == game.world.bounds.width - coconut.body.width / 2 || coconut.y == coconut.body.height / 2 || coconut.y == game.world.bounds.height - coconut.body.height / 2) {
+
             gameaudio.play('coconutsound', 0, 0.3, false, true);
 
         }
@@ -404,7 +407,7 @@ function playerListener() {
             scoreTimer.resume();
         }
         if (score >= 5) {
-            game.physics.arcade.accelerateToObject(coconut, player, 600);
+            game.physics.arcade.accelerateToObject(coconut, player, 1000, 1000, 1000);
         } else if (score <= 1) {
             game.physics.arcade.accelerateToXY(coconut, randPosObject.x, randPosObject.y, 600);
         }
@@ -455,6 +458,9 @@ function gameOver() {
 
     // Toggle the ad on again
     showAd();
+
+    // Stop that coconut from moving everywhere
+    coconut.body.reset(0, 0);
 
     // Define then add the overlay
     var graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
@@ -568,18 +574,10 @@ function resetGame() {
 
     player.x = game.world.centerX;
     player.y = game.world.height - player.height;
-    player.body.velocity.x = 0;
-    player.body.velocity.y = 0;
-    player.body.acceleration.x = 0;
-    player.body.acceleration.y = 0;
+    player.body.reset(0, 0);
 
     coconut.x = game.world.centerX;
     coconut.y = 150;
-    coconut.body.velocity.x = 0;
-    coconut.body.velocity.y = 0;
-    coconut.body.acceleration.x = 0;
-    coconut.body.acceleration.y = 0;
-    coconut.body.angularVelocity = 0;
     coconutAntiCheat();
 
     isPressed = false;
