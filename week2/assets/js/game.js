@@ -124,9 +124,6 @@ function preload() {
     game.load.spritesheet('playagain', 'assets/img/playagainButtonSheet.png', 290, 145, 2);
     game.load.spritesheet('highscorebutton', 'assets/img/highscoreButtonSheet.png', 129, 59, 2);
 
-    //    game.load.image('startbutton', 'assets/img/start.png');
-    //    game.load.image('startbuttondown', 'assets/img/startdown.png');
-    //    game.load.image('highscorebutton', 'assets/img/highscore.png');
     game.load.image('highscorebg', 'assets/img/highscorebg.png');
     game.load.image('mutebutton', 'assets/img/mute.png');
     game.load.image('soundonbutton', 'assets/img/soundon.png');
@@ -135,7 +132,6 @@ function preload() {
     game.load.image('bg', 'assets/img/bg.png');
     game.load.image('player', 'assets/img/player.png');
     game.load.image('coconut', 'assets/img/coconut.png');
-    //    game.load.image('playagain', 'assets/img/playagain.png');
 }
 
 function create() {
@@ -657,11 +653,11 @@ function checkScreenSize() {
 */
 
 function hideAd() {
-    $("#ad").css("display", "none");
+    $("#ad").hide();
 }
 
 function showAd() {
-    $("#ad").css("display", "inline-block");
+    $("#ad").show();
 }
 
 function arrayTrim(array, trimTo) {
