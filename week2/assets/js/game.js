@@ -120,8 +120,13 @@ function preload() {
 
 
     // Images are faster, so they come last
-    game.load.image('startbutton', 'assets/img/start.png');
-    game.load.image('highscorebutton', 'assets/img/highscore.png');
+    game.load.spritesheet('startbutton', 'assets/img/startButtonSheet.png', 285, 145, 2);
+    game.load.spritesheet('playagain', 'assets/img/playagainButtonSheet.png', 290, 145, 2);
+    game.load.spritesheet('highscorebutton', 'assets/img/highscoreButtonSheet.png', 129, 59, 2);
+
+    //    game.load.image('startbutton', 'assets/img/start.png');
+    //    game.load.image('startbuttondown', 'assets/img/startdown.png');
+    //    game.load.image('highscorebutton', 'assets/img/highscore.png');
     game.load.image('highscorebg', 'assets/img/highscorebg.png');
     game.load.image('mutebutton', 'assets/img/mute.png');
     game.load.image('soundonbutton', 'assets/img/soundon.png');
@@ -130,7 +135,7 @@ function preload() {
     game.load.image('bg', 'assets/img/bg.png');
     game.load.image('player', 'assets/img/player.png');
     game.load.image('coconut', 'assets/img/coconut.png');
-    game.load.image('playagain', 'assets/img/playagain.png');
+    //    game.load.image('playagain', 'assets/img/playagain.png');
 }
 
 function create() {
@@ -245,7 +250,7 @@ function startMenu() {
 
     // Create overlay and add to screen
     var startMenuOverlay = new Phaser.Graphics(this.game, 0, 0);
-    startMenuOverlay.beginFill(0x000000, 1);
+    startMenuOverlay.beginFill(0x000000, 0.8);
     startMenuOverlay.drawRect(0, 0, game.world.width, game.world.height);
     startMenuOverlay.endFill();
 
@@ -267,7 +272,7 @@ function startMenu() {
 
 
     // Create Start Dodging button that goes over screen
-    this.startButton = game.add.button(game.world.centerX - 125, game.world.centerY - 50, 'startbutton', function () {
+    this.startButton = game.add.button(game.world.centerX - 150, game.world.centerY - 75, 'startbutton', function () {
         // Hide the ad
         $("#ad").css("display", "none");
         // Play sound
@@ -294,6 +299,7 @@ function startMenu() {
 
     }, this);
     startButton.inputEnabled = true;
+    startButton.setFrames(0, 0, 1, 0);
 
     this.highscoresbg = game.add.image(game.world.centerX - 128, game.world.centerY + 80, 'highscorebg');
     this.highscoresbg.visible = false;
@@ -324,7 +330,7 @@ function startMenu() {
             this.highscores.visible = false;
             this.highscoresbg.visible = false;
         }
-    }, this);
+    }, this, 0, 0, 1, 0);
     this.highscoreButton.inputEnabled = true;
     this.mutebutton = game.add.button(game.world.width - 60, 10, muteButtonRef, function () {
         // Play sound
@@ -473,13 +479,13 @@ function gameOver() {
     this.finalScore = game.add.text(game.world.centerX - 100, game.world.centerY - 100, scoreText, style);
 
     // Play again button
-    this.playAgainButton = game.add.button(game.world.centerX - 125, game.world.centerY, 'playagain', function () {
+    this.playAgainButton = game.add.button(game.world.centerX - 150, game.world.centerY - 50, 'playagain', function () {
         this.highscores.visible = false;
         this.highscoresbg.visible = false;
         this.highscoreButton.visible = false;
         this.mainmenuButton.visible = false;
         resetGame();
-    }, this);
+    }, this, 0, 0, 1, 0);
 
     this.highscoresbg = game.add.image(game.world.centerX - 128, game.world.centerY + 105, 'highscorebg');
     this.highscoresbg.visible = false;
@@ -540,7 +546,7 @@ function gameOver() {
             this.highscores.visible = false;
             this.highscoresbg.visible = false;
         }
-    }, this);
+    }, this, 0, 0, 1, 0);
     this.highscoreButton.inputEnabled = true;
 
     // Go back to main menu by refreshing
