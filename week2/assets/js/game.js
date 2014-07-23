@@ -122,7 +122,7 @@ function preload() {
 
     // Images are faster, so they come last
     game.load.spritesheet('startbutton', 'assets/img/startButtonSheet.png', 285, 145, 2);
-    game.load.spritesheet('playagain', 'assets/img/playagainButtonSheet.png', 290, 145, 2);
+    game.load.spritesheet('playagain', 'assets/img/playagainButtonSheet.png', 295, 145, 2);
     game.load.spritesheet('highscorebutton', 'assets/img/highscoreButtonSheet.png', 129, 59, 2);
 
     game.load.image('highscorebg', 'assets/img/highscorebg.png');
@@ -489,7 +489,7 @@ function gameOver() {
         resetGame();
     }, this, 0, 0, 1, 0);
 
-    this.highscoresbg = game.add.image(game.world.centerX - 128, game.world.centerY + 105, 'highscorebg');
+    this.highscoresbg = game.add.image(game.world.centerX - 128, game.world.centerY + 90, 'highscorebg');
     this.highscoresbg.visible = false;
 
     highscoresArray.sort(function (a, b) {
@@ -534,11 +534,11 @@ function gameOver() {
         fill: "#FFF",
         align: "center"
     };
-    this.highscores = game.add.text(game.world.centerX - 25, game.world.centerY + 175, highscoreText, style);
+    this.highscores = game.add.text(game.world.centerX - 25, game.world.centerY + 155, highscoreText, style);
     this.highscores.visible = false;
 
     // Create button that goes over screen
-    this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 110, 'highscorebutton', function () {
+    this.highscoreButton = game.add.button(game.world.centerX - 60, game.world.centerY + 90, 'highscorebutton', function () {
         // Play sound
         gameaudio.play('buttonsound');
         if (!this.highscores.visible) {
