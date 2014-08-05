@@ -99,7 +99,7 @@ function preload() {
     titlesong = game.add.audio('titlesong');
     titlesong.play('', 0, 0);
     if (window.ext && window.ext.IDTK_APP) {
-        ext.IDTK_APP.makeCall("addForceMusic", "assets/sound/titlesong");
+        ext.IDTK_APP.makeCall("addForceMusic", "assets/sound/titlesong.ogg");
     }
 
     gameMuted = localStorage.getItem("mute") === "true";
