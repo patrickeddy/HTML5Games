@@ -97,6 +97,7 @@ function preload() {
     */
     titlesong = game.load.audio('titlesong', 'assets/sound/titlesong.ogg');
     titlesong = game.add.audio('titlesong');
+    titlesong.play('', 0, 0);
 
     gameMuted = localStorage.getItem("mute") === "true";
     // Check the mute status in localStorage
@@ -119,7 +120,6 @@ function preload() {
     // Finally the game song
     game.load.audio('gamesong', 'assets/sound/gamesong.ogg');
     gamesong = game.add.audio('gamesong');
-
 
     // Images are faster, so they come last
     game.load.spritesheet('startbutton', 'assets/img/startButtonSheet.png', 285, 145, 2);
