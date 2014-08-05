@@ -17,6 +17,7 @@ var isPressed = false;
 var player;
 var coconut;
 var bg;
+var coconut_speed = 600;
 // For the coconut
 var randPosObject;
 // Game score
@@ -351,9 +352,7 @@ function update() {
         }
 
         if (coconut.x == coconut.body.width / 2 || coconut.x == game.world.bounds.width - coconut.body.width / 2 || coconut.y == coconut.body.height / 2 || coconut.y == game.world.bounds.height - coconut.body.height / 2) {
-
             gameaudio.play('coconutsound', 0, 0.3, false, true);
-
         }
         if (coconut.x == coconut.body.width / 2) {
             coconut.body.angularAcceleration += 200;
@@ -406,10 +405,15 @@ function playerListener() {
         } else if (scoreTimer.paused) {
             scoreTimer.resume();
         }
-        if (score >= 5) {
-            game.physics.arcade.accelerateToObject(coconut, player, 1000, 1000, 1000);
-        } else if (score <= 1) {
-            game.physics.arcade.accelerateToXY(coconut, randPosObject.x, randPosObject.y, 600);
+
+        /*
+        Coconut pathfinding
+            */
+        if (score % 5 == 0 && score != 0) {
+            coconut_speed += 20;
+        } else if (score < 1 || score % 2 == 0) {
+            coconutAntiCheat();
+            game.physics.arcade.accelerateToXY(coconut, randPosObject.x, randPosObject.y, coconut_speed);
         }
     }
 }
@@ -595,8 +599,9 @@ function backToStart() {
 
 function coconutAntiCheat() {
     function randomPos() {
-        this.x = Math.abs(Math.floor(Math.random() * game.world.width));
-        this.y = Math.abs(Math.floor(Math.random() * game.world.height));
+        this.x = player.x;
+        this.y = player.y;
+        //        this.x = Math.abs(Math.floor(Math.random() * game.world.width));//        this.y = Math.abs(Math.floor(Math.random() * game.world.height));
     }
     randPosObject = new randomPos();
 }
