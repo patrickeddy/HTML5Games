@@ -582,7 +582,7 @@ function resetGame() {
 
     coconut.x = game.world.centerX;
     coconut.y = 150;
-    coconut_speed = 0;
+    coconut_speed = 600;
 
     isPressed = false;
 
