@@ -97,7 +97,9 @@ function preload() {
     */
     titlesong = game.load.audio('titlesong', 'assets/sound/titlesong.ogg');
     titlesong = game.add.audio('titlesong');
-    titlesong.play('', 0, 0);
+    if (window.ext && window.ext.IDTK_APP) {
+        ext.IDTK_APP.makeCall("addForceMusic", "assets/sound/titlesong");
+    }
 
     gameMuted = localStorage.getItem("mute") === "true";
     // Check the mute status in localStorage
