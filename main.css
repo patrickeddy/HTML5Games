@@ -3,11 +3,11 @@ body {
     margin: 0;
 }
 body {
-    font-family: helvetica, arial, serif;
+    font-family: sans-serif, serif;
     text-align: center;
 }
 h1 {
-    font-weight: 100;
+    font-weight: 300;
 }
 a.main-header {
     margin-top: 2em;
@@ -26,9 +26,9 @@ a.main-header:hover {
 }
 a.game-link {
     cursor: pointer;
-    transition: opacity .5s ease-in;
-    -moz-transition: opacity .5s ease-in;
-    -webkit-transition: opacity .25s ease-in;
+    transition: opacity .1s ease-in;
+    -moz-transition: opacity .1s ease-in;
+    -webkit-transition: opacity .1s ease-in;
 }
 a.game-link:hover {
     color: #00B;
