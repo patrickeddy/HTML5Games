@@ -399,7 +399,8 @@ function playerListener() {
         var input_x = game.input.x;
         var input_y = game.input.y;
 
-        if (player.x != input_x || player.y != input_y && player.checkWorldBounds) {
+
+        if (player.overlap(new Sprite(input_x, input_y, null, null) && player.x != input_x || player.y != input_y && player.checkWorldBounds)) {
             player.x = input_x;
             player.y = input_y;
         }
