@@ -400,26 +400,26 @@ function playerListener() {
         var input_y = game.input.y;
 
 
-        if (player.overlap(new Sprite(input_x, input_y, null, null) && player.x != input_x || player.y != input_y && player.checkWorldBounds)) {
-            player.x = input_x;
-            player.y = input_y;
-        }
-        if (!scoreTimer.running) {
-            scoreTimer.start();
-        } else if (scoreTimer.paused) {
-            scoreTimer.resume();
-        }
+        if (player.x != input_x || player.y != input_y && player.checkWorldBounds)) {
+        player.x = input_x;
+        player.y = input_y;
+    }
+    if (!scoreTimer.running) {
+        scoreTimer.start();
+    } else if (scoreTimer.paused) {
+        scoreTimer.resume();
+    }
 
-        /*
+    /*
         Coconut pathfinding
             */
-        if (score % 5 == 0 && score != 0) {
-            coconut_speed += 20;
-        } else if (score < 1 || score % 2 == 0) {
-            coconutAntiCheat();
-            game.physics.arcade.accelerateToXY(coconut, randPosObject.x, randPosObject.y, coconut_speed);
-        }
+    if (score % 5 == 0 && score != 0) {
+        coconut_speed += 20;
+    } else if (score < 1 || score % 2 == 0) {
+        coconutAntiCheat();
+        game.physics.arcade.accelerateToXY(coconut, randPosObject.x, randPosObject.y, coconut_speed);
     }
+}
 }
 
 /*
