@@ -197,8 +197,8 @@ function create() {
             isPressed = true;
     }, this);
     player.events.onInputUp.add(function () {
-        if (!touchDisabled)
-            isPressed = false;
+        isPressed = false;
+        alert("up");
     }, this);
     player.events.onInputOver.add(function () {
         isPressed = true;
