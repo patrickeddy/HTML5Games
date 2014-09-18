@@ -198,7 +198,6 @@ function create() {
     }, this);
     player.events.onInputUp.add(function () {
         isPressed = false;
-        alert("up");
     }, this);
     player.events.onInputOver.add(function () {
         isPressed = true;
