@@ -389,7 +389,7 @@ function playerListener() {
     };
     // Help text for game start
     if (this.helpText == null)
-        this.helpText = game.add.text(player.x - 220, player.y - 120, text, style);
+        this.helpText = game.add.text(player.x - 160, player.y - 120, text, style);
 
     // Actually checks if the player is pressed down
     if (isPressed) {
