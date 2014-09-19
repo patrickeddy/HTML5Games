@@ -381,10 +381,10 @@ function update() {
 function playerListener() {
 
     // Help text
-    var text = "Dodge the coconut!";
+    var text = "Drag to dodge!";
     var style = {
         font: "5em Arial",
-        fill: "#000",
+        fill: "#FFF",
         align: "center"
     };
     // Help text for game start
