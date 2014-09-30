@@ -1,2 +1,2 @@
-sudo rm DodgeCoconut.zip
-sudo zip -r -X DodgeCoconut.zip assets index.html
+rm DodgeCoconut.zip
+zip -r -X DodgeCoconut.zip assets index.html
