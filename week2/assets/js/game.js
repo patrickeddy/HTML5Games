@@ -129,7 +129,7 @@ function preload() {
     game.load.image('highscorebg', 'assets/img/highscorebg.png');
     game.load.image('mutebutton', 'assets/img/mute.png');
     game.load.image('soundonbutton', 'assets/img/soundon.png');
-    game.load.image('mainmenubutton', 'assets/img/mainmenu.png');
+    game.load.image('mainmenubutton', 'assets/img/backbutton.png');
 
     game.load.image('bg', 'assets/img/bg.png');
     game.load.image('player', 'assets/img/player.png');
